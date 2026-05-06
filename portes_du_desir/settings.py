@@ -88,3 +88,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Les Portes du Desir <noreply@example.com>')
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-eb2eba.up.railway.app',
+]

@@ -64,10 +64,14 @@ def quiz_questions(request):
                 QuizAnswer.objects.create(session=session, question=question, answer_text=value)
 
         result_data = compute_result(session)
+
+        email_sent = True
         try:
             send_result_email(session, result_data)
         except Exception as exc:
-            messages.warning(request, f"Résultat enregistré, mais email non envoyé. Erreur : {exc}")
+            email_sent = False
+            messages.warning(request, f"Email non envoyé : {exc}")
+
         return redirect('quiz_result', session_id=session.id)
 
     return render(request, 'quiz/quiz.html', {'session': session, 'questions': questions})
@@ -86,8 +90,8 @@ def quiz_result(request, session_id):
 
     scores = [
         {'code': 'mental', 'label': 'Mentale', 'score': session.total_score_mental, 'pct': pct(session.total_score_mental), 'color': '#6b7dbf'},
-        {'code': 'emotionnel', 'label': 'Émotionnelle', 'score': session.total_score_emotionnel, 'pct': pct(session.total_score_emotionnel), 'color': '#bf6b7d'},
-        {'code': 'energetique', 'label': 'Énergétique', 'score': session.total_score_energetique, 'pct': pct(session.total_score_energetique), 'color': '#7dbf6b'},
+        {'code': 'emotionnel', 'label': 'Emotionnelle', 'score': session.total_score_emotionnel, 'pct': pct(session.total_score_emotionnel), 'color': '#bf6b7d'},
+        {'code': 'energetique', 'label': 'Energetique', 'score': session.total_score_energetique, 'pct': pct(session.total_score_energetique), 'color': '#7dbf6b'},
         {'code': 'sensoriel', 'label': 'Sensorielle', 'score': session.total_score_sensoriel, 'pct': pct(session.total_score_sensoriel), 'color': '#bf9b6b'},
         {'code': 'physique', 'label': 'Physique', 'score': session.total_score_physique, 'pct': pct(session.total_score_physique), 'color': '#bf6b6b'},
     ]
@@ -129,11 +133,9 @@ def export_csv(request):
                      'Score Sensoriel', 'Score Physique', 'Date du test'])
     for session in QuizSession.objects.select_related('participant').order_by('-id'):
         writer.writerow([
-            session.id,
-            session.participant.email,
+            session.id, session.participant.email,
             'Oui' if session.participant.consent_given else 'Non',
-            session.participant.source,
-            session.result_label,
+            session.participant.source, session.result_label,
             session.total_score_mental, session.total_score_emotionnel,
             session.total_score_energetique, session.total_score_sensoriel,
             session.total_score_physique,
@@ -145,21 +147,18 @@ def export_csv(request):
 @require_http_methods(["GET"])
 def admin_dashboard(request):
     sessions = QuizSession.objects.select_related('participant').order_by('-id')
-
     total_sessions = sessions.count()
     total_participants = LeadParticipant.objects.count()
     total_consents = LeadParticipant.objects.filter(consent_given=True).count()
 
-    counts = {}
-    for code in ['mental', 'emotionnel', 'energetique', 'sensoriel', 'physique']:
-        counts[code] = QuizSession.objects.filter(result_code=code).count()
+    counts = {code: QuizSession.objects.filter(result_code=code).count()
+              for code in ['mental', 'emotionnel', 'energetique', 'sensoriel', 'physique']}
 
     def pct(v): return round(v * 100 / total_sessions) if total_sessions > 0 else 0
     pcts = {k: pct(v) for k, v in counts.items()}
 
-    # Porte majoritaire
     dominant_code = max(counts, key=counts.get) if total_sessions > 0 else None
-    dominant_label = RESULT_CONTENT[dominant_code]['emoji'] if dominant_code else '—'
+    dominant_label = RESULT_CONTENT[dominant_code]['emoji'] if dominant_code and counts[dominant_code] > 0 else '—'
 
     return render(request, 'quiz/dashboard.html', {
         'sessions': sessions[:200],

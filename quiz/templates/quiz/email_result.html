@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre résultat — Les Portes du Désir</title>
+</head>
+<body style="margin:0;padding:0;background:#0d0a0e;font-family:'Georgia',serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0a0e;">
+<tr><td align="center" style="padding:40px 20px;">
+
+<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+  <!-- Header -->
+  <tr>
+    <td style="text-align:center;padding:0 0 32px 0;border-bottom:1px solid rgba(201,169,110,0.2);">
+      <p style="font-family:'Georgia',serif;font-size:22px;letter-spacing:6px;color:#c9a96e;text-transform:uppercase;margin:0;">Les Portes du Désir</p>
+      <p style="font-size:11px;letter-spacing:4px;color:#8a7a8d;text-transform:uppercase;margin:8px 0 0;">Votre résultat personnalisé</p>
+    </td>
+  </tr>
+
+  <!-- Résultat badge -->
+  <tr>
+    <td style="padding:40px 0 0;text-align:center;">
+      <table cellpadding="0" cellspacing="0" style="display:inline-block;margin:0 auto;">
+        <tr>
+          <td style="border:1px solid rgba(201,169,110,0.3);padding:7px 20px;background:rgba(201,169,110,0.08);">
+            <p style="font-size:11px;letter-spacing:3px;color:#c9a96e;text-transform:uppercase;margin:0;">{{ result_code|upper }}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Titre résultat -->
+  <tr>
+    <td style="padding:20px 0 0;text-align:center;">
+      <h1 style="font-family:'Georgia',serif;font-size:32px;font-weight:400;color:#fdfaf6;margin:0 0 8px;line-height:1.2;">{{ result_label }}</h1>
+      <p style="font-family:'Georgia',serif;font-size:16px;font-style:italic;color:#c9a96e;margin:0;">{{ result_title }}</p>
+    </td>
+  </tr>
+
+  <!-- Description -->
+  <tr>
+    <td style="padding:32px 0;">
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,0.25),transparent);"></div>
+      <p style="font-size:15px;line-height:1.8;color:#d4c5d9;text-align:center;padding:32px 20px;margin:0;">{{ result_description }}</p>
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,0.25),transparent);"></div>
+    </td>
+  </tr>
+
+  <!-- Scores -->
+  <tr>
+    <td style="padding:0 20px 32px;">
+      <p style="font-size:10px;letter-spacing:3px;color:#8a7a8d;text-transform:uppercase;text-align:center;margin:0 0 24px;">Détail de vos scores</p>
+
+      <!-- Passion -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+        <tr>
+          <td style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fdfaf6;">Passion {% if result_code == 'passion' %}★{% endif %}</td>
+          <td style="text-align:right;font-family:'Georgia',serif;font-size:18px;color:#c9a96e;">{{ score_passion }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:6px;">
+            <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;">
+              <div style="height:3px;width:{{ passion_pct }}%;background:linear-gradient(90deg,#7b2d42,#c9516a);border-radius:2px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Sécurité -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+        <tr>
+          <td style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fdfaf6;">Sécurité {% if result_code == 'securite' %}★{% endif %}</td>
+          <td style="text-align:right;font-family:'Georgia',serif;font-size:18px;color:#c9a96e;">{{ score_securite }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:6px;">
+            <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;">
+              <div style="height:3px;width:{{ securite_pct }}%;background:linear-gradient(90deg,#2d5a7b,#4a9aba);border-radius:2px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Liberté -->
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fdfaf6;">Liberté {% if result_code == 'liberte' %}★{% endif %}</td>
+          <td style="text-align:right;font-family:'Georgia',serif;font-size:18px;color:#c9a96e;">{{ score_liberte }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:6px;">
+            <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;">
+              <div style="height:3px;width:{{ liberte_pct }}%;background:linear-gradient(90deg,#4a7b4a,#72ba72);border-radius:2px;"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Footer -->
+  <tr>
+    <td style="padding:24px 0 0;border-top:1px solid rgba(201,169,110,0.12);text-align:center;">
+      <p style="font-size:11px;letter-spacing:2px;color:#8a7a8d;text-transform:uppercase;margin:0 0 8px;">Les Portes du Désir</p>
+      <p style="font-size:11px;color:#4a3a4e;margin:0;">Cet email vous a été envoyé suite à votre participation au questionnaire.</p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>

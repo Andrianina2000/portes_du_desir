@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Les Portes du Désir{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --noir: #0d0a0e;
+            --creme: #f5f0ea;
+            --or: #c9a96e;
+            --or-clair: #e8d5b0;
+            --bordeaux: #7b2d42;
+            --lilas: #d4c5d9;
+            --ardoise: #2a1f2e;
+            --gris-doux: #8a7a8d;
+            --blanc-pur: #fdfaf6;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            background: var(--noir);
+            color: var(--creme);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(123,45,66,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 90%, rgba(201,169,110,0.10) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 60px;
+        }
+        .site-header {
+            width: 100%;
+            max-width: 780px;
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(201,169,110,0.2);
+            animation: fadeDown 0.8s ease both;
+        }
+        .site-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            color: var(--or);
+            text-transform: uppercase;
+            text-decoration: none;
+            display: block;
+        }
+        .site-tagline {
+            font-size: 0.72rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gris-doux);
+            margin-top: 6px;
+        }
+        .container { width: 100%; max-width: 680px; animation: fadeUp 0.9s ease 0.1s both; }
+        .card {
+            background: rgba(42,31,46,0.6);
+            border: 1px solid rgba(201,169,110,0.15);
+            border-radius: 2px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--or), transparent);
+            opacity: 0.5;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: var(--blanc-pur);
+            margin-bottom: 16px;
+        }
+        h1 em { font-style: italic; color: var(--or); }
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            color: var(--or);
+            margin-bottom: 12px;
+        }
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--blanc-pur);
+            margin-bottom: 8px;
+        }
+        p { line-height: 1.7; color: var(--lilas); font-size: 0.95rem; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .btn-primary { background: var(--or); color: var(--noir); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,169,110,0.35); }
+        .btn-outline { background: transparent; color: var(--or); border: 1px solid rgba(201,169,110,0.5); }
+        .btn-outline:hover { background: rgba(201,169,110,0.08); border-color: var(--or); }
+        .btn-ghost { background: rgba(255,255,255,0.05); color: var(--creme); border: 1px solid rgba(255,255,255,0.1); font-size: 0.73rem; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+        .form-group { margin-bottom: 24px; }
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gris-doux);
+            margin-bottom: 10px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(13,10,14,0.6);
+            border: 1px solid rgba(201,169,110,0.2);
+            color: var(--blanc-pur);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+            border-radius: 1px;
+        }
+        .form-control:focus { border-color: var(--or); box-shadow: 0 0 0 3px rgba(201,169,110,0.1); }
+        .form-control::placeholder { color: rgba(138,122,141,0.6); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        .consent-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            cursor: pointer;
+            padding: 18px;
+            border: 1px solid rgba(201,169,110,0.15);
+            background: rgba(13,10,14,0.3);
+            transition: border-color 0.3s;
+        }
+        .consent-label:hover { border-color: rgba(201,169,110,0.35); }
+        .consent-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--or); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+        .consent-text { font-size: 0.85rem; color: var(--gris-doux); line-height: 1.6; }
+        .choice-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border: 1px solid rgba(201,169,110,0.12);
+            background: rgba(13,10,14,0.3);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .choice-option::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 0;
+            background: var(--or);
+            transition: width 0.25s ease;
+        }
+        .choice-option:hover { border-color: rgba(201,169,110,0.4); background: rgba(201,169,110,0.05); }
+        .choice-option:has(input:checked) { border-color: var(--or); background: rgba(201,169,110,0.1); }
+        .choice-option:has(input:checked)::before { width: 3px; }
+        .choice-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--or); flex-shrink: 0; cursor: pointer; }
+        .choice-text { font-size: 0.92rem; color: var(--creme); line-height: 1.5; }
+        .messages { margin-bottom: 24px; }
+        .message { padding: 14px 18px; border-left: 3px solid var(--or); background: rgba(201,169,110,0.08); color: var(--or-clair); font-size: 0.88rem; margin-bottom: 10px; }
+        .message.warning { border-color: #c97c4a; background: rgba(201,124,74,0.08); color: #e8b490; }
+        .field-errors { font-size: 0.78rem; color: #e87070; margin-top: 6px; }
+        .sep { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,169,110,0.25), transparent); margin: 32px 0; }
+        .ornement { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+        .ornement-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,169,110,0.4)); }
+        .ornement-line.right { background: linear-gradient(90deg, rgba(201,169,110,0.4), transparent); }
+        .ornement-diamond { width: 8px; height: 8px; background: var(--or); transform: rotate(45deg); flex-shrink: 0; }
+        .text-or { color: var(--or); }
+        .text-muted { color: var(--gris-doux); }
+        .text-sm { font-size: 0.82rem; }
+        .mt-4 { margin-top: 16px; }
+        .mt-6 { margin-top: 24px; }
+        .mt-8 { margin-top: 32px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-4 { margin-bottom: 16px; }
+        .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .gap-3 { gap: 12px; }
+        .gap-4 { gap: 16px; }
+        .items-center { align-items: center; }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @media (max-width: 600px) {
+            .page-wrapper { padding: 24px 16px 48px; }
+            .card { padding: 28px 22px; }
+            .site-header { margin-bottom: 32px; }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="site-header">
+            <a href="{% url 'home' %}" class="site-logo">Les Portes du Désir</a>
+            <p class="site-tagline">Découvrez votre dynamique intérieure</p>
+        </header>
+        <div class="container">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

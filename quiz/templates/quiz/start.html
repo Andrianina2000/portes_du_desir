@@ -1,0 +1,76 @@
+{% extends "quiz/base.html" %}
+{% block title %}Commencer — Les Portes du Désir{% endblock %}
+
+{% block extra_head %}
+<style>
+.step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris-doux);
+}
+.step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(201,169,110,0.3); }
+.step-dot.active { background: var(--or); }
+.start-intro { margin-bottom: 32px; }
+.start-intro h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <span style="margin-left:8px;">Étape 1 sur 3</span>
+    </div>
+
+    <div class="start-intro">
+        <h1>Avant de<br><em>commencer</em></h1>
+        <p class="mt-4">Renseignez votre email pour recevoir automatiquement votre résultat personnalisé à la fin du questionnaire.</p>
+    </div>
+
+    <div class="sep"></div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="form-label" for="id_email">Votre adresse email</label>
+            <input
+                type="email"
+                name="email"
+                id="id_email"
+                class="form-control"
+                placeholder="votre@email.com"
+                value="{{ form.email.value|default:'' }}"
+                required
+            >
+            {% if form.email.errors %}
+                <div class="field-errors">{{ form.email.errors|join:", " }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label class="consent-label">
+                <input type="checkbox" name="consent" id="id_consent" {% if form.consent.value %}checked{% endif %}>
+                <span class="consent-text">
+                    J'accepte que mes données soient utilisées dans le cadre de ce questionnaire et de recevoir mon résultat par email. Aucune diffusion à des tiers.
+                </span>
+            </label>
+            {% if form.consent.errors %}
+                <div class="field-errors">{{ form.consent.errors|join:", " }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">
+            Lancer le questionnaire
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+    </form>
+</div>
+{% endblock %}

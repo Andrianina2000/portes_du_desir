@@ -1,0 +1,83 @@
+{% extends "quiz/base.html" %}
+{% block title %}QR Code — Les Portes du Désir{% endblock %}
+
+{% block extra_head %}
+<style>
+.qr-page { text-align:center; }
+.qr-container {
+    display:inline-block;
+    padding:24px;
+    background:#fdf8f2;
+    border-radius:2px;
+    margin:32px 0;
+    box-shadow:0 0 60px rgba(201,169,110,0.15);
+}
+.qr-container img { display:block; width:220px; height:220px; }
+.qr-url {
+    font-size:0.78rem;
+    color:var(--gris-doux);
+    word-break:break-all;
+    padding:12px 16px;
+    background:rgba(13,10,14,0.5);
+    border:1px solid rgba(201,169,110,0.12);
+    margin-bottom:28px;
+    font-family:monospace;
+}
+.qr-instructions { max-width:360px; margin:0 auto 32px; }
+.qr-instructions p { font-size:0.88rem; color:var(--gris-doux); line-height:1.7; }
+.step-list { text-align:left; margin-top:20px; }
+.step-item { display:flex; gap:14px; align-items:flex-start; margin-bottom:14px; }
+.step-num { width:26px;height:26px;border-radius:50%;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:var(--or);flex-shrink:0;font-family:'Cormorant Garamond',serif; }
+.step-text { font-size:0.85rem; color:var(--lilas); padding-top:2px; line-height:1.5; }
+.print-hint { font-size:0.75rem; color:var(--gris-doux); margin-top:8px; }
+@media print {
+    .site-header, .result-actions, .print-hint, a.btn { display:none !important; }
+    body { background:#fff !important; }
+    body::before { display:none; }
+    .page-wrapper { padding:20px; }
+    .qr-container { box-shadow:none; border:1px solid #ccc; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="qr-page">
+    <h1 style="margin-bottom:8px;">Code <em>QR</em></h1>
+    <p style="color:var(--gris-doux);margin-bottom:0;">À partager lors du webinaire ou à imprimer</p>
+
+    <div class="qr-container">
+        <img src="{% url 'qr_code_image' %}" alt="QR Code Les Portes du Désir">
+    </div>
+
+    <p class="qr-url">{{ start_url }}</p>
+
+    <div class="qr-instructions">
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <p class="step-text">Projetez ce QR code ou imprimez-le et distribuez-le aux participants</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <p class="step-text">Les participants le scannent avec leur smartphone et accèdent directement au quiz</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <p class="step-text">À la fin, ils reçoivent leur résultat par email — vous recevez une copie automatiquement</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <p class="step-text">Consultez le dashboard pour voir tous les résultats en temps réel</p>
+            </div>
+        </div>
+    </div>
+
+    <p class="print-hint">💡 Utilisez Ctrl+P (ou Cmd+P) pour imprimer cette page</p>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline">Voir le dashboard</a>
+        <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
+        <a href="javascript:window.print()" class="btn btn-ghost">🖨 Imprimer</a>
+    </div>
+</div>
+{% endblock %}

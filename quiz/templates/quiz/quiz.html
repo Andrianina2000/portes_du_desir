@@ -1,0 +1,123 @@
+{% extends "quiz/base.html" %}
+{% block title %}Questionnaire — Les Portes du Désir{% endblock %}
+
+{% block extra_head %}
+<style>
+.quiz-header { margin-bottom: 36px; }
+.quiz-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); }
+.progress-wrap { margin-bottom: 40px; }
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris-doux);
+    margin-bottom: 10px;
+}
+.progress-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.06); }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--bordeaux), var(--or)); transition: width 0.6s ease; }
+.question-block {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+}
+.question-block:last-of-type { border-bottom: none; }
+.question-num {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--or);
+    opacity: 0.7;
+    margin-bottom: 10px;
+}
+.question-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--blanc-pur);
+    margin-bottom: 6px;
+}
+.question-text { font-size: 0.88rem; color: var(--gris-doux); margin-bottom: 20px; line-height: 1.6; }
+.choices-list { display: flex; flex-direction: column; gap: 8px; }
+.submit-zone {
+    padding-top: 40px;
+    text-align: center;
+}
+.submit-note { font-size: 0.78rem; color: var(--gris-doux); margin-top: 14px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="quiz-header">
+    <div class="step-indicator" style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris-doux);">
+        <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--or);"></div>
+        <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
+        <span style="margin-left:8px;">Étape 2 sur 3 — Le questionnaire</span>
+    </div>
+    <h1>Vos <em>réponses</em></h1>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+    <div class="progress-info">
+        <span>Progression</span>
+        <span id="progressLabel">0 / {{ questions|length }}</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+</div>
+
+<form method="post" id="quizForm">
+    {% csrf_token %}
+
+    {% for question in questions %}
+    <div class="question-block">
+        <p class="question-num">Question {{ forloop.counter }}</p>
+        <p class="question-title">{{ question.title }}</p>
+        {% if question.text %}
+            <p class="question-text">{{ question.text }}</p>
+        {% endif %}
+
+        {% if question.question_type == 'single' %}
+            <div class="choices-list">
+                {% for choice in question.choices.all %}
+                <label class="choice-option">
+                    <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" required>
+                    <span class="choice-text">{{ choice.label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        {% elif question.question_type == 'text' %}
+            <textarea name="question_{{ question.id }}" class="form-control" rows="4" placeholder="Écrivez librement…"></textarea>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="submit-zone">
+        <button type="submit" class="btn btn-primary" style="padding: 16px 48px;">
+            Révéler mon résultat
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="submit-note">Votre résultat vous sera envoyé par email</p>
+    </div>
+</form>
+
+<script>
+const total = {{ questions|length }};
+let answered = 0;
+
+function updateProgress() {
+    const radios = document.querySelectorAll('input[type="radio"]:checked');
+    const texts = document.querySelectorAll('textarea');
+    let count = radios.length;
+    texts.forEach(t => { if (t.value.trim()) count++; });
+    const pct = Math.round((count / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = count + ' / ' + total;
+}
+
+document.getElementById('quizForm').addEventListener('change', updateProgress);
+document.getElementById('quizForm').addEventListener('input', updateProgress);
+</script>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "quiz/base.html" %}
+{% block title %}Votre résultat — Les Portes du Désir{% endblock %}
+
+{% block extra_head %}
+<style>
+.result-page { text-align: center; }
+.result-eyebrow { font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gris-doux); margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:12px; }
+.result-eyebrow::before,.result-eyebrow::after { content:''; width:24px; height:1px; background:rgba(201,169,110,0.3); }
+.door-emoji { font-size:3rem; display:block; margin-bottom:16px; }
+.result-main-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,4vw,2.6rem); font-weight:300; color:var(--blanc-pur); margin-bottom:8px; }
+.result-subtitle { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:var(--or); margin-bottom:24px; }
+.result-badge { display:inline-flex; align-items:center; gap:10px; padding:8px 20px; border:1px solid rgba(201,169,110,0.35); background:rgba(201,169,110,0.08); margin-bottom:24px; }
+.result-badge-dot { width:8px; height:8px; background:var(--or); border-radius:50%; animation:pulse 2s infinite; }
+.result-badge-text { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--or); }
+.result-desc { max-width:480px; margin:0 auto 28px; color:var(--lilas); line-height:1.8; font-size:0.95rem; text-align:left; }
+.result-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px; text-align:left; }
+.result-info-box { padding:18px 20px; background:rgba(13,10,14,0.4); border:1px solid rgba(201,169,110,0.12); }
+.result-info-label { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gris-doux); margin-bottom:8px; }
+.result-info-text { font-size:0.88rem; color:var(--creme); line-height:1.6; }
+.result-phrase { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; color:var(--or); text-align:center; margin:8px 0 32px; padding:20px; border-top:1px solid rgba(201,169,110,0.15); border-bottom:1px solid rgba(201,169,110,0.15); }
+
+.sep { height:1px; background:linear-gradient(90deg,transparent,rgba(201,169,110,0.25),transparent); margin:32px 0; }
+.scoring-section { text-align:left; }
+.scoring-title { font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gris-doux); margin-bottom:20px; text-align:center; }
+.score-row { margin-bottom:16px; }
+.score-row-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.score-row-label { font-size:0.82rem; letter-spacing:0.1em; color:var(--creme); display:flex; align-items:center; gap:8px; }
+.score-row-value { font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--or); }
+.score-track { height:5px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; }
+.score-fill { height:100%; border-radius:3px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.winner-tag { font-size:0.62rem; padding:2px 8px; letter-spacing:0.15em; text-transform:uppercase; border:1px solid; opacity:0.9; }
+
+.nb-box { margin-top:32px; padding:20px 24px; background:rgba(201,169,110,0.04); border-left:2px solid rgba(201,169,110,0.3); text-align:left; }
+.nb-box p { font-size:0.82rem; color:var(--gris-doux); line-height:1.7; }
+.nb-box strong { color:var(--or-clair); font-weight:400; }
+
+.email-notice { display:flex; align-items:center; gap:14px; padding:16px 20px; background:rgba(201,169,110,0.06); border:1px solid rgba(201,169,110,0.15); margin-top:28px; text-align:left; }
+.email-notice-text { font-size:0.82rem; color:var(--gris-doux); line-height:1.5; }
+.email-notice-text strong { color:var(--or-clair); font-weight:400; }
+.result-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:32px; }
+
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+@keyframes revealResult { from { opacity:0; transform:scale(0.96) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.result-reveal { animation:revealResult 0.8s ease both; }
+@media (max-width:560px) { .result-info-grid { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if result %}
+<div class="result-page result-reveal">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:28px;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris-doux);">
+        <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
+        <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--or);"></div>
+        <span style="margin-left:8px;">Étape 3 sur 3 — Votre résultat</span>
+    </div>
+
+    <p class="result-eyebrow">Résultat personnalisé</p>
+    <span class="door-emoji">{{ result.emoji }}</span>
+
+    <div class="result-badge">
+        <div class="result-badge-dot"></div>
+        <span class="result-badge-text">{{ result.label }}</span>
+    </div>
+
+    <h1 class="result-main-title">{{ result.title }}</h1>
+    <p class="result-subtitle">{{ result.subtitle }}</p>
+
+    <p class="result-desc">{{ result.description }}</p>
+
+    <div class="result-info-grid">
+        <div class="result-info-box">
+            <p class="result-info-label">Ce dont vous avez besoin</p>
+            <p class="result-info-text">{{ result.besoins }}</p>
+        </div>
+        <div class="result-info-box">
+            <p class="result-info-label">Conseil pour votre partenaire</p>
+            <p class="result-info-text">{{ result.conseil }}</p>
+        </div>
+    </div>
+
+    <p class="result-phrase">« {{ result.phrase }} »</p>
+
+    <div class="sep"></div>
+
+    <!-- Scores visuels -->
+    <div class="scoring-section">
+        <p class="scoring-title">Détail de vos 5 portes</p>
+        <div>
+            {% for s in scores %}
+            <div class="score-row">
+                <div class="score-row-header">
+                    <span class="score-row-label">
+                        Porte {{ s.label }}
+                        {% if s.code == session.result_code %}
+                        <span class="winner-tag" style="color:{{ s.color }};border-color:{{ s.color }};">★ Dominante</span>
+                        {% endif %}
+                    </span>
+                    <span class="score-row-value">{{ s.score }}</span>
+                </div>
+                <div class="score-track">
+                    <div class="score-fill" style="width:{{ s.pct }}%;background:{{ s.color }};"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Note bene -->
+    <div class="nb-box">
+        <p><strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes du désir, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien. Votre porte dominante peut évoluer avec le temps.</p>
+    </div>
+
+    <div class="email-notice">
+        <span style="font-size:1.2rem;flex-shrink:0;">✉</span>
+        <p class="email-notice-text">Une copie de votre résultat a été envoyée à <strong>{{ session.participant.email }}</strong>. Vérifiez votre boîte de réception.</p>
+    </div>
+
+    <div class="result-actions">
+        <a href="{% url 'start_quiz' %}" class="btn btn-outline">Refaire le test</a>
+        <a href="{% url 'home' %}" class="btn btn-ghost">Retour à l'accueil</a>
+    </div>
+</div>
+{% else %}
+<div style="text-align:center;padding:60px 20px;">
+    <p class="text-muted">Aucun résultat disponible.</p>
+    <a href="{% url 'start_quiz' %}" class="btn btn-primary" style="margin-top:24px;">Refaire le test</a>
+</div>
+{% endif %}
+{% endblock %}

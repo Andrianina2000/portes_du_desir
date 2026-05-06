@@ -19,6 +19,8 @@
 .result-info-text { font-size:0.88rem; color:var(--creme); line-height:1.6; }
 .result-phrase { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; color:var(--or); text-align:center; margin:8px 0 32px; padding:20px; border-top:1px solid rgba(201,169,110,0.15); border-bottom:1px solid rgba(201,169,110,0.15); }
 .sep { height:1px; background:linear-gradient(90deg,transparent,rgba(201,169,110,0.25),transparent); margin:32px 0; }
+
+/* Scores */
 .scoring-section { text-align:left; }
 .scoring-title { font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gris-doux); margin-bottom:20px; text-align:center; }
 .score-row { margin-bottom:16px; }
@@ -28,13 +30,37 @@
 .score-track { height:5px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; }
 .score-fill { height:100%; border-radius:3px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); }
 .winner-tag { font-size:0.62rem; padding:2px 8px; letter-spacing:0.15em; text-transform:uppercase; border:1px solid; opacity:0.9; }
+
+/* Fiche personnelle */
+.fiche-perso {
+    background: rgba(201,169,110,0.05);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 28px;
+    margin-bottom: 28px;
+    text-align: left;
+}
+.fiche-perso-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.fiche-perso-title::after { content:''; flex:1; height:1px; background:rgba(201,169,110,0.2); }
+.fiche-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.fiche-row:last-child { border-bottom:none; }
+.fiche-row-label { font-size:0.78rem; color:var(--gris-doux); }
+.fiche-row-value { font-size:0.88rem; color:var(--creme); font-weight:400; }
+
 .nb-box { margin-top:32px; padding:20px 24px; background:rgba(201,169,110,0.04); border-left:2px solid rgba(201,169,110,0.3); text-align:left; }
 .nb-box p { font-size:0.82rem; color:var(--gris-doux); line-height:1.7; }
 .nb-box strong { color:var(--or-clair); font-weight:400; }
-.email-notice { display:flex; align-items:center; gap:14px; padding:16px 20px; background:rgba(201,169,110,0.06); border:1px solid rgba(201,169,110,0.15); margin-top:28px; text-align:left; }
-.email-notice-text { font-size:0.82rem; color:var(--gris-doux); line-height:1.5; }
-.email-notice-text strong { color:var(--or-clair); font-weight:400; }
+
 .result-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:32px; }
+
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 @keyframes revealResult { from { opacity:0; transform:scale(0.96) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
 .result-reveal { animation:revealResult 0.8s ease both; }
@@ -49,7 +75,7 @@
         <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
         <div style="width:6px;height:6px;border-radius:50%;background:rgba(201,169,110,0.3);"></div>
         <div style="width:6px;height:6px;border-radius:50%;background:var(--or);"></div>
-        <span style="margin-left:8px;">Votre résultat personnel</span>
+        <span style="margin-left:8px;">Étape 3 sur 3 — Votre résultat</span>
     </div>
 
     <p class="result-eyebrow">Résultat personnalisé</p>
@@ -79,9 +105,30 @@
 
     <div class="sep"></div>
 
-    <!-- Scores visuels du patient -->
+    <!-- Fiche personnelle du participant -->
+    <div class="fiche-perso">
+        <p class="fiche-perso-title">Votre fiche personnelle</p>
+        <div class="fiche-row">
+            <span class="fiche-row-label">Email</span>
+            <span class="fiche-row-value">{{ session.participant.email }}</span>
+        </div>
+        <div class="fiche-row">
+            <span class="fiche-row-label">Porte dominante</span>
+            <span class="fiche-row-value">{{ result.emoji }} {{ result.label }}</span>
+        </div>
+        <div class="fiche-row">
+            <span class="fiche-row-label">Date du test</span>
+            <span class="fiche-row-value">{{ session.completed_at|date:"d/m/Y à H:i" }}</span>
+        </div>
+        <div class="fiche-row">
+            <span class="fiche-row-label">Session</span>
+            <span class="fiche-row-value">#{{ session.id }}</span>
+        </div>
+    </div>
+
+    <!-- Scores des 5 portes -->
     <div class="scoring-section">
-        <p class="scoring-title">Vos 5 portes — détail de votre profil</p>
+        <p class="scoring-title">Vos 5 portes en détail</p>
         {% for s in scores %}
         <div class="score-row">
             <div class="score-row-header">
@@ -105,13 +152,6 @@
         <p><strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes du désir, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien. Votre porte dominante peut évoluer avec le temps.</p>
     </div>
 
-    <!-- Confirmation email -->
-    <div class="email-notice">
-        <span style="font-size:1.2rem;flex-shrink:0;">✉</span>
-        <p class="email-notice-text">Une copie de votre résultat a été envoyée à <strong>{{ session.participant.email }}</strong>. Vérifiez votre boîte de réception.</p>
-    </div>
-
-    <!-- Actions patient uniquement -->
     <div class="result-actions">
         <a href="{% url 'start_quiz' %}" class="btn btn-outline">Refaire le test</a>
         <a href="{% url 'home' %}" class="btn btn-ghost">Retour à l'accueil</a>

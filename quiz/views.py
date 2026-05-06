@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import StartForm
 from .models import LeadParticipant, Question, QuestionChoice, QuizAnswer, QuizSession
-from .services import RESULT_CONTENT, compute_result, send_result_email
+from .services import RESULT_CONTENT, compute_result
 
 
 @require_http_methods(["GET"])
@@ -65,12 +65,7 @@ def quiz_questions(request):
                 QuizAnswer.objects.create(session=session, question=question, answer_text=value)
 
         result_data = compute_result(session)
-        try:
-            send_result_email(session, result_data)
-        except Exception as exc:
-            messages.warning(request, f"Email non envoyé : {exc}")
-
-        # Redirection vers résultat personnel du patient
+        # Email désactivé pour l'instant
         return redirect('quiz_result', session_id=session.id)
 
     return render(request, 'quiz/quiz.html', {'session': session, 'questions': questions})
@@ -78,7 +73,7 @@ def quiz_questions(request):
 
 @require_http_methods(["GET"])
 def quiz_result(request, session_id):
-    """Page résultat personnel — vue patient uniquement."""
+    """Vue personnelle du patient — son résultat uniquement."""
     session = get_object_or_404(QuizSession, id=session_id)
     result_data = RESULT_CONTENT.get(session.result_code)
 
@@ -125,6 +120,8 @@ def qr_code_image(request):
 
 @require_http_methods(["GET"])
 def export_csv(request):
+    if not request.user.is_staff:
+        return redirect('home')
     response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
     response['Content-Disposition'] = 'attachment; filename="portes_du_desir_export.csv"'
     writer = csv.writer(response)
@@ -147,7 +144,10 @@ def export_csv(request):
 @login_required(login_url='/admin/login/')
 @require_http_methods(["GET"])
 def admin_dashboard(request):
-    """Dashboard admin — réservé aux admins connectés."""
+    """Dashboard admin — réservé aux staff connectés."""
+    if not request.user.is_staff:
+        return redirect('home')
+
     sessions = QuizSession.objects.select_related('participant').order_by('-id')
     total_sessions = sessions.count()
     total_participants = LeadParticipant.objects.count()

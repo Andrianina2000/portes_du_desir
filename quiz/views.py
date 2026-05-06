@@ -4,6 +4,7 @@ from io import BytesIO
 import qrcode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -29,7 +30,11 @@ def start_quiz(request):
             consent = form.cleaned_data['consent']
             participant, _ = LeadParticipant.objects.get_or_create(
                 email=email,
-                defaults={'consent_given': consent, 'consent_date': timezone.now(), 'source': 'QR / Web'}
+                defaults={
+                    'consent_given': consent,
+                    'consent_date': timezone.now(),
+                    'source': 'QR / Web'
+                }
             )
             participant.consent_given = consent
             participant.consent_date = timezone.now()
@@ -37,6 +42,7 @@ def start_quiz(request):
             participant.save()
             session = QuizSession.objects.create(participant=participant)
             request.session['quiz_session_id'] = session.id
+            request.session.modified = True
             return redirect('quiz_questions')
     else:
         form = StartForm()
@@ -47,39 +53,72 @@ def start_quiz(request):
 def quiz_questions(request):
     session_id = request.session.get('quiz_session_id')
     if not session_id:
-        messages.error(request, "Veuillez commencer le test avant de continuer.")
+        messages.error(request, "Session expirée. Veuillez recommencer.")
         return redirect('start_quiz')
-    session = get_object_or_404(QuizSession, id=session_id)
-    questions = Question.objects.filter(is_active=True).prefetch_related('choices')
+
+    try:
+        session = QuizSession.objects.select_related('participant').get(id=session_id)
+    except QuizSession.DoesNotExist:
+        messages.error(request, "Session introuvable. Veuillez recommencer.")
+        return redirect('start_quiz')
+
+    questions = list(Question.objects.filter(is_active=True).prefetch_related('choices'))
+
+    if not questions:
+        messages.error(request, "Aucune question disponible pour le moment.")
+        return redirect('home')
 
     if request.method == 'POST':
-        QuizAnswer.objects.filter(session=session).delete()
-        for question in questions:
-            field_name = f'question_{question.id}'
-            value = request.POST.get(field_name, '').strip()
-            if question.question_type == 'single' and value:
-                choice = QuestionChoice.objects.filter(id=value, question=question).first()
-                if choice:
-                    QuizAnswer.objects.create(session=session, question=question, choice=choice)
-            elif question.question_type == 'text':
-                QuizAnswer.objects.create(session=session, question=question, answer_text=value)
+        try:
+            with transaction.atomic():
+                QuizAnswer.objects.filter(session=session).delete()
+                for question in questions:
+                    field_name = f'question_{question.id}'
+                    value = request.POST.get(field_name, '').strip()
+                    if question.question_type == 'single' and value:
+                        choice = QuestionChoice.objects.filter(
+                            id=value, question=question
+                        ).first()
+                        if choice:
+                            QuizAnswer.objects.create(
+                                session=session,
+                                question=question,
+                                choice=choice
+                            )
+                    elif question.question_type == 'text' and value:
+                        QuizAnswer.objects.create(
+                            session=session,
+                            question=question,
+                            answer_text=value
+                        )
 
-        result_data = compute_result(session)
-        # Email désactivé pour l'instant
-        return redirect('quiz_result', session_id=session.id)
+                result_data = compute_result(session)
 
-    return render(request, 'quiz/quiz.html', {'session': session, 'questions': questions})
+            return redirect('quiz_result', session_id=session.id)
+
+        except Exception as e:
+            messages.error(request, "Une erreur est survenue. Veuillez réessayer.")
+            return render(request, 'quiz/quiz.html', {
+                'session': session,
+                'questions': questions,
+            })
+
+    return render(request, 'quiz/quiz.html', {
+        'session': session,
+        'questions': questions,
+    })
 
 
 @require_http_methods(["GET"])
 def quiz_result(request, session_id):
-    """Vue personnelle du patient — son résultat uniquement."""
     session = get_object_or_404(QuizSession, id=session_id)
     result_data = RESULT_CONTENT.get(session.result_code)
 
-    total = (session.total_score_mental + session.total_score_emotionnel +
-             session.total_score_energetique + session.total_score_sensoriel +
-             session.total_score_physique) or 1
+    total = (
+        session.total_score_mental + session.total_score_emotionnel +
+        session.total_score_energetique + session.total_score_sensoriel +
+        session.total_score_physique
+    ) or 1
 
     def pct(v): return round(v * 100 / total)
 
@@ -108,7 +147,12 @@ def qr_code_page(request):
 @require_http_methods(["GET"])
 def qr_code_image(request):
     start_url = request.build_absolute_uri(reverse('start_quiz'))
-    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=12, border=4)
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=12,
+        border=4,
+    )
     qr.add_data(start_url)
     qr.make(fit=True)
     img = qr.make_image(fill_color='#1a0a12', back_color='#fdf8f2')
@@ -125,18 +169,20 @@ def export_csv(request):
     response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
     response['Content-Disposition'] = 'attachment; filename="portes_du_desir_export.csv"'
     writer = csv.writer(response)
-    writer.writerow(['ID', 'Email', 'Consentement', 'Source', 'Porte dominante',
-                     'Score Mental', 'Score Emotionnel', 'Score Energetique',
-                     'Score Sensoriel', 'Score Physique', 'Date du test'])
-    for session in QuizSession.objects.select_related('participant').order_by('-id'):
+    writer.writerow([
+        'ID', 'Email', 'Consentement', 'Source', 'Porte dominante',
+        'Score Mental', 'Score Emotionnel', 'Score Energetique',
+        'Score Sensoriel', 'Score Physique', 'Date du test'
+    ])
+    for s in QuizSession.objects.select_related('participant').order_by('-id'):
         writer.writerow([
-            session.id, session.participant.email,
-            'Oui' if session.participant.consent_given else 'Non',
-            session.participant.source, session.result_label,
-            session.total_score_mental, session.total_score_emotionnel,
-            session.total_score_energetique, session.total_score_sensoriel,
-            session.total_score_physique,
-            session.completed_at.strftime('%d/%m/%Y %H:%M') if session.completed_at else '',
+            s.id, s.participant.email,
+            'Oui' if s.participant.consent_given else 'Non',
+            s.participant.source, s.result_label,
+            s.total_score_mental, s.total_score_emotionnel,
+            s.total_score_energetique, s.total_score_sensoriel,
+            s.total_score_physique,
+            s.completed_at.strftime('%d/%m/%Y %H:%M') if s.completed_at else '',
         ])
     return response
 
@@ -144,7 +190,6 @@ def export_csv(request):
 @login_required(login_url='/admin/login/')
 @require_http_methods(["GET"])
 def admin_dashboard(request):
-    """Dashboard admin — réservé aux staff connectés."""
     if not request.user.is_staff:
         return redirect('home')
 
@@ -153,14 +198,19 @@ def admin_dashboard(request):
     total_participants = LeadParticipant.objects.count()
     total_consents = LeadParticipant.objects.filter(consent_given=True).count()
 
-    counts = {code: QuizSession.objects.filter(result_code=code).count()
-              for code in ['mental', 'emotionnel', 'energetique', 'sensoriel', 'physique']}
+    counts = {
+        code: QuizSession.objects.filter(result_code=code).count()
+        for code in ['mental', 'emotionnel', 'energetique', 'sensoriel', 'physique']
+    }
 
     def pct(v): return round(v * 100 / total_sessions) if total_sessions > 0 else 0
     pcts = {k: pct(v) for k, v in counts.items()}
 
     dominant_code = max(counts, key=counts.get) if total_sessions > 0 else None
-    dominant_label = RESULT_CONTENT[dominant_code]['emoji'] if dominant_code and counts[dominant_code] > 0 else '—'
+    dominant_label = (
+        RESULT_CONTENT[dominant_code]['emoji']
+        if dominant_code and counts[dominant_code] > 0 else '—'
+    )
 
     return render(request, 'quiz/dashboard.html', {
         'sessions': sessions[:200],

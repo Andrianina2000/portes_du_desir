@@ -3,6 +3,7 @@ from io import BytesIO
 
 import qrcode
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -64,14 +65,12 @@ def quiz_questions(request):
                 QuizAnswer.objects.create(session=session, question=question, answer_text=value)
 
         result_data = compute_result(session)
-
-        email_sent = True
         try:
             send_result_email(session, result_data)
         except Exception as exc:
-            email_sent = False
             messages.warning(request, f"Email non envoyé : {exc}")
 
+        # Redirection vers résultat personnel du patient
         return redirect('quiz_result', session_id=session.id)
 
     return render(request, 'quiz/quiz.html', {'session': session, 'questions': questions})
@@ -79,6 +78,7 @@ def quiz_questions(request):
 
 @require_http_methods(["GET"])
 def quiz_result(request, session_id):
+    """Page résultat personnel — vue patient uniquement."""
     session = get_object_or_404(QuizSession, id=session_id)
     result_data = RESULT_CONTENT.get(session.result_code)
 
@@ -144,8 +144,10 @@ def export_csv(request):
     return response
 
 
+@login_required(login_url='/admin/login/')
 @require_http_methods(["GET"])
 def admin_dashboard(request):
+    """Dashboard admin — réservé aux admins connectés."""
     sessions = QuizSession.objects.select_related('participant').order_by('-id')
     total_sessions = sessions.count()
     total_participants = LeadParticipant.objects.count()

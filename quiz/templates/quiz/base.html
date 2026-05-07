@@ -69,7 +69,8 @@
             height: 110px;
             width: auto;
             /* Le logo est sur fond blanc — on l'adapte au fond sombre */
-            filter: brightness(0) invert(0.85) sepia(0.2) saturate(0.8);
+            
+            filter: none;
             opacity: 0.9;
             transition: opacity 0.3s;
         }
@@ -177,7 +178,7 @@
     <div class="page-wrapper">
         <header class="site-header">
             <a href="{% url 'home' %}" class="site-logo">
-                <img src="{% static 'quiz/img/logo.jpg' %}" alt="Intimement Nous">
+                <img src="{% static 'quiz/img/logo.png' %}" alt="Intimement Nous">
             </a>
             <span class="site-tagline">Découvrez votre porte d'entrée dans l'intimité</span>
             <div class="logo-ornement">

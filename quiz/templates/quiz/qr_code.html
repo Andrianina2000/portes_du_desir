@@ -1,56 +1,176 @@
 {% extends "quiz/base.html" %}
-{% block title %}QR Code — Les Portes du Désir{% endblock %}
+{% block title %}QR Code — Intimement Nous{% endblock %}
 
 {% block extra_head %}
 <style>
-.qr-page { text-align:center; }
-.qr-container {
-    display:inline-block;
-    padding:24px;
-    background:#fdf8f2;
-    border-radius:2px;
-    margin:32px 0;
-    box-shadow:0 0 60px rgba(201,169,110,0.15);
+.qr-page { text-align: center; }
+
+/* ── QR container brandé ── */
+.qr-outer {
+    display: inline-block;
+    padding: 3px;
+    background: linear-gradient(135deg, #8C1827, #DE8284, #EDDDAA, #DE8284, #8C1827);
+    background-size: 200% 200%;
+    animation: shimmer 4s ease-in-out infinite;
+    border-radius: 3px;
+    margin: 32px 0;
 }
-.qr-container img { display:block; width:220px; height:220px; }
+.qr-inner {
+    background: #FDF8F3;
+    padding: 22px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.qr-inner img {
+    display: block;
+    width: 220px;
+    height: 220px;
+    border-radius: 1px;
+}
+.qr-brand-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: #12080A;
+    letter-spacing: 0.15em;
+    text-align: center;
+    font-style: italic;
+}
+
+/* ── URL ── */
 .qr-url {
-    font-size:0.78rem;
-    color:var(--gris-doux);
-    word-break:break-all;
-    padding:12px 16px;
-    background:rgba(13,10,14,0.5);
-    border:1px solid rgba(201,169,110,0.12);
-    margin-bottom:28px;
-    font-family:monospace;
+    font-size: 0.77rem;
+    color: var(--brun-leger);
+    word-break: break-all;
+    padding: 13px 18px;
+    background: rgba(15,8,6,0.5);
+    border: 1px solid rgba(197,184,163,0.1);
+    margin-bottom: 32px;
+    font-family: monospace;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
 }
-.qr-instructions { max-width:360px; margin:0 auto 32px; }
-.qr-instructions p { font-size:0.88rem; color:var(--gris-doux); line-height:1.7; }
-.step-list { text-align:left; margin-top:20px; }
-.step-item { display:flex; gap:14px; align-items:flex-start; margin-bottom:14px; }
-.step-num { width:26px;height:26px;border-radius:50%;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:var(--or);flex-shrink:0;font-family:'Cormorant Garamond',serif; }
-.step-text { font-size:0.85rem; color:var(--lilas); padding-top:2px; line-height:1.5; }
-.print-hint { font-size:0.75rem; color:var(--gris-doux); margin-top:8px; }
+
+/* ── Instructions ── */
+.qr-instructions { max-width: 380px; margin: 0 auto 36px; }
+.qr-instructions > p {
+    font-size: 0.87rem;
+    color: var(--brun-leger);
+    line-height: 1.75;
+    margin-bottom: 20px;
+}
+
+.step-list { text-align: left; }
+.step-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+.step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(222,130,132,0.1);
+    border: 1px solid rgba(222,130,132,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--rose);
+    flex-shrink: 0;
+    font-family: 'Cormorant Garamond', serif;
+}
+.step-text {
+    font-size: 0.85rem;
+    color: var(--beige);
+    padding-top: 4px;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+/* ── Variantes QR ── */
+.qr-variants {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 28px 0;
+}
+.qr-variant {
+    padding: 14px 10px;
+    border: 1px solid rgba(197,184,163,0.1);
+    background: rgba(15,8,6,0.35);
+    border-radius: 2px;
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brun-leger);
+    font-weight: 300;
+    transition: border-color 0.3s;
+}
+.qr-variant:hover { border-color: rgba(222,130,132,0.25); }
+.qr-variant-icon { font-size: 1.2rem; display: block; margin-bottom: 8px; }
+
+.print-hint {
+    font-size: 0.73rem;
+    color: var(--brun-leger);
+    margin-top: 10px;
+    font-weight: 300;
+    font-style: italic;
+}
+
 @media print {
-    .site-header, .result-actions, .print-hint, a.btn { display:none !important; }
-    body { background:#fff !important; }
-    body::before { display:none; }
-    .page-wrapper { padding:20px; }
-    .qr-container { box-shadow:none; border:1px solid #ccc; }
+    .site-header, .result-actions, .print-hint, a.btn,
+    .qr-variants, .qr-instructions > p:first-child { display: none !important; }
+    body { background: #fff !important; }
+    body::before, body::after { display: none; }
+    .page-wrapper { padding: 20px; }
+    .qr-outer { background: #ccc; animation: none; }
+    .qr-inner { border: 1px solid #ccc; }
+}
+
+@media (max-width: 480px) {
+    .qr-variants { grid-template-columns: 1fr; }
 }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="qr-page">
-    <h1 style="margin-bottom:8px;">Code <em>QR</em></h1>
-    <p style="color:var(--gris-doux);margin-bottom:0;">À partager lors du webinaire ou à imprimer</p>
+    <h1 style="margin-bottom:10px;">Code <em>QR</em></h1>
+    <p style="color:var(--brun-leger);margin-bottom:0;font-size:0.9rem;">
+        À projeter lors du webinaire, à imprimer ou à partager en story
+    </p>
 
-    <div class="qr-container">
-        <img src="{% url 'qr_code_image' %}" alt="QR Code Les Portes du Désir">
+    <!-- QR Code brandé -->
+    <div class="qr-outer">
+        <div class="qr-inner">
+            <img src="{% url 'qr_code_image' %}" alt="QR Code Intimement Nous">
+            <p class="qr-brand-label">Intimement Nous</p>
+        </div>
     </div>
 
     <p class="qr-url">{{ start_url }}</p>
 
+    <!-- Variantes de format -->
+    <div class="qr-variants">
+        <div class="qr-variant">
+            <span class="qr-variant-icon">🖨</span>
+            Séminaire<br>printable
+        </div>
+        <div class="qr-variant">
+            <span class="qr-variant-icon">📱</span>
+            Story<br>Instagram
+        </div>
+        <div class="qr-variant">
+            <span class="qr-variant-icon">💻</span>
+            Projection<br>webinaire
+        </div>
+    </div>
+
+    <!-- Instructions -->
     <div class="qr-instructions">
         <div class="step-list">
             <div class="step-item">
@@ -59,11 +179,11 @@
             </div>
             <div class="step-item">
                 <div class="step-num">2</div>
-                <p class="step-text">Les participants le scannent avec leur smartphone et accèdent directement au quiz</p>
+                <p class="step-text">Les participants le scannent et accèdent directement au questionnaire</p>
             </div>
             <div class="step-item">
                 <div class="step-num">3</div>
-                <p class="step-text">À la fin, ils reçoivent leur résultat par email — vous recevez une copie automatiquement</p>
+                <p class="step-text">À la fin, ils reçoivent leur résultat par email instantanément</p>
             </div>
             <div class="step-item">
                 <div class="step-num">4</div>
@@ -72,12 +192,12 @@
         </div>
     </div>
 
-    <p class="print-hint">💡 Utilisez Ctrl+P (ou Cmd+P) pour imprimer cette page</p>
+    <p class="print-hint">Utilisez Ctrl+P (ou Cmd+P) pour imprimer cette page en haute qualité</p>
 
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;">
         <a href="{% url 'admin_dashboard' %}" class="btn btn-outline">Voir le dashboard</a>
         <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
-        <a href="javascript:window.print()" class="btn btn-ghost">🖨 Imprimer</a>
+        <a href="javascript:window.print()" class="btn btn-ghost">Imprimer</a>
     </div>
 </div>
 {% endblock %}

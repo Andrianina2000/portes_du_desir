@@ -1,22 +1,71 @@
 {% extends "quiz/base.html" %}
-{% block title %}Commencer — Les Portes du Désir{% endblock %}
+{% block title %}Commencer — Intimement Nous{% endblock %}
 
 {% block extra_head %}
 <style>
 .step-indicator {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 32px;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+    gap: 10px;
+    margin-bottom: 36px;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--gris-doux);
+    color: var(--brun-leger);
+    font-weight: 300;
 }
-.step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(201,169,110,0.3); }
-.step-dot.active { background: var(--or); }
-.start-intro { margin-bottom: 32px; }
-.start-intro h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.step-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(197,184,163,0.2);
+    transition: background 0.3s;
+}
+.step-dot.active { background: var(--rose); box-shadow: 0 0 8px rgba(222,130,132,0.4); }
+
+.start-intro { margin-bottom: 36px; }
+.start-intro h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 14px;
+}
+.start-intro p {
+    color: var(--brun-leger);
+    line-height: 1.8;
+    max-width: 440px;
+}
+
+/* ── Confidence row ── */
+.confidence-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: rgba(197,184,163,0.04);
+    border: 1px solid rgba(197,184,163,0.1);
+    border-radius: 2px;
+}
+.confidence-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brun-leger);
+    font-weight: 300;
+}
+.confidence-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--rose);
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.submit-wrap {
+    margin-top: 10px;
+}
 </style>
 {% endblock %}
 
@@ -26,12 +75,20 @@
         <div class="step-dot active"></div>
         <div class="step-dot"></div>
         <div class="step-dot"></div>
-        <span style="margin-left:8px;">Étape 1 sur 3</span>
+        <span style="margin-left:10px;">Étape 1 sur 3</span>
     </div>
 
     <div class="start-intro">
         <h1>Avant de<br><em>commencer</em></h1>
-        <p class="mt-4">Renseignez votre email pour recevoir automatiquement votre résultat personnalisé à la fin du questionnaire.</p>
+        <p class="mt-4">
+            Renseignez votre email pour recevoir votre résultat personnalisé à la fin du questionnaire. Votre porte dominante vous sera révélée avec une description complète et des conseils.
+        </p>
+    </div>
+
+    <div class="confidence-row">
+        <div class="confidence-item"><div class="confidence-dot"></div> Confidentiel</div>
+        <div class="confidence-item"><div class="confidence-dot"></div> 5 minutes</div>
+        <div class="confidence-item"><div class="confidence-dot"></div> Résultat immédiat</div>
     </div>
 
     <div class="sep"></div>
@@ -49,6 +106,7 @@
                 placeholder="votre@email.com"
                 value="{{ form.email.value|default:'' }}"
                 required
+                autocomplete="email"
             >
             {% if form.email.errors %}
                 <div class="field-errors">{{ form.email.errors|join:", " }}</div>
@@ -59,7 +117,7 @@
             <label class="consent-label">
                 <input type="checkbox" name="consent" id="id_consent" {% if form.consent.value %}checked{% endif %}>
                 <span class="consent-text">
-                    J'accepte que mes données soient utilisées dans le cadre de ce questionnaire et de recevoir mon résultat par email. Aucune diffusion à des tiers.
+                    J'accepte que mes données soient utilisées dans le cadre de ce questionnaire et de recevoir mon résultat par email. Aucune diffusion à des tiers. Vous pouvez vous désinscrire à tout moment.
                 </span>
             </label>
             {% if form.consent.errors %}
@@ -67,10 +125,14 @@
             {% endif %}
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">
-            Lancer le questionnaire
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        <div class="submit-wrap">
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+                Entrer dans l'exploration
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}

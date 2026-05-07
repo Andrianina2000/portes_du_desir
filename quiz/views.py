@@ -146,16 +146,49 @@ def qr_code_page(request):
 
 @require_http_methods(["GET"])
 def qr_code_image(request):
+    import os
+    from PIL import Image as PILImage, ImageDraw
+
     start_url = request.build_absolute_uri(reverse('start_quiz'))
+
+    # QR avec correction HIGH pour intégrer le logo
     qr = qrcode.QRCode(
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
         box_size=12,
         border=4,
     )
     qr.add_data(start_url)
     qr.make(fit=True)
-    img = qr.make_image(fill_color='#1a0a12', back_color='#fdf8f2')
+    img = qr.make_image(fill_color='#1A0F0D', back_color='#FDF8F3')
+    img = img.convert("RGBA")
+    qr_w, qr_h = img.size
+
+    # Chercher le logo dans les static
+    logo_path = None
+    for candidate in [
+        os.path.join(settings.BASE_DIR, 'quiz', 'static', 'quiz', 'img', 'logo.jpg'),
+        os.path.join(settings.BASE_DIR, 'quiz', 'static', 'quiz', 'img', 'logo.png'),
+    ]:
+        if os.path.exists(candidate):
+            logo_path = candidate
+            break
+
+    if logo_path:
+        try:
+            logo = PILImage.open(logo_path).convert("RGBA")
+            logo_size = int(qr_w * 0.22)
+            logo = logo.resize((logo_size, logo_size), PILImage.LANCZOS)
+            padding = 8
+            bg_size = logo_size + padding * 2
+            bg = PILImage.new("RGBA", (bg_size, bg_size), (253, 248, 243, 255))
+            pos_x = (qr_w - bg_size) // 2
+            pos_y = (qr_h - bg_size) // 2
+            img.paste(bg, (pos_x, pos_y), bg)
+            img.paste(logo, (pos_x + padding, pos_y + padding), logo)
+        except Exception:
+            pass
+
     buffer = BytesIO()
     img.save(buffer, format='PNG')
     buffer.seek(0)

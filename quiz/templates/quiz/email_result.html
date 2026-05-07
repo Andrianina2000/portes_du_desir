@@ -4,46 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Votre résultat — Intimement Nous</title>
-<!--[if mso]>
-<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
-<![endif]-->
 </head>
-<body style="margin:0;padding:0;background:#12080A;font-family:Georgia,'Times New Roman',serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background:#12080A;font-family:Georgia,'Times New Roman',serif;">
 
-<!-- Wrapper principal -->
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#12080A;min-height:100vh;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#12080A;">
 <tr><td align="center" style="padding:40px 16px;">
 
-<!-- Conteneur email -->
 <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;background:#1A0F0D;border:1px solid rgba(197,184,163,0.12);">
 
-  <!-- ── Ligne déco top ── -->
+  <!-- Ligne déco top -->
   <tr>
     <td style="height:2px;background:linear-gradient(90deg,#8C1827,#DE8284,#EDDDAA,#DE8284,#8C1827);font-size:0;line-height:0;">&nbsp;</td>
   </tr>
 
-  <!-- ── Header ── -->
+  <!-- Header logo -->
   <tr>
-    <td style="text-align:center;padding:44px 40px 32px;">
-      <!-- Logo -->
+    <td style="text-align:center;padding:44px 40px 28px;">
       <div style="margin-bottom:6px;">
-        <span style="font-family:Georgia,serif;font-size:24px;letter-spacing:8px;color:#C5B8A3;text-transform:uppercase;font-weight:400;">Intimement</span>
-        <span style="font-family:Georgia,serif;font-size:28px;color:#DE8284;font-style:italic;letter-spacing:2px;font-weight:400;"> Nous</span>
+        <span style="font-family:Georgia,serif;font-size:22px;letter-spacing:8px;color:#C5B8A3;text-transform:uppercase;font-weight:400;">Intimement</span>
+        <span style="font-family:Georgia,serif;font-size:26px;color:#DE8284;font-style:italic;letter-spacing:2px;font-weight:400;"> Nous</span>
       </div>
       <p style="font-size:10px;letter-spacing:5px;color:#6B5B4E;text-transform:uppercase;margin:8px 0 0;font-family:Georgia,serif;">Votre résultat personnalisé</p>
-
-      <!-- Ornement -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
-        <tr>
-          <td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td>
-        </tr>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;">
+        <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
     </td>
   </tr>
 
-  <!-- ── Badge résultat ── -->
+  <!-- Illustration de la porte dominante -->
   <tr>
-    <td style="padding:0 40px;text-align:center;">
+    <td style="padding:0 0 0 0;text-align:center;">
+      {% if result_code == 'mental' %}
+      <img src="{{ illustration_url }}" alt="Porte Mentale" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
+      {% elif result_code == 'emotionnel' %}
+      <img src="{{ illustration_url }}" alt="Porte Émotionnelle" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
+      {% elif result_code == 'energetique' %}
+      <img src="{{ illustration_url }}" alt="Porte Énergétique" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
+      {% elif result_code == 'sensoriel' %}
+      <img src="{{ illustration_url }}" alt="Porte Sensorielle" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
+      {% elif result_code == 'physique' %}
+      <img src="{{ illustration_url }}" alt="Porte Physique" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
+      {% endif %}
+      <!-- Dégradé sur l'image -->
+      <div style="height:40px;background:linear-gradient(transparent,#1A0F0D);margin-top:-40px;position:relative;z-index:1;"></div>
+    </td>
+  </tr>
+
+  <!-- Badge résultat -->
+  <tr>
+    <td style="padding:20px 40px 0;text-align:center;">
       <table cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 auto;">
         <tr>
           <td style="border:1px solid rgba(197,184,163,0.22);padding:8px 22px;background:rgba(197,184,163,0.06);">
@@ -54,190 +63,156 @@
     </td>
   </tr>
 
-  <!-- ── Titre résultat ── -->
+  <!-- Titre résultat -->
   <tr>
-    <td style="padding:24px 40px 0;text-align:center;">
-      <h1 style="font-family:Georgia,serif;font-size:34px;font-weight:400;color:#FDF8F3;margin:0 0 10px;line-height:1.2;letter-spacing:-0.01em;">{{ result_label }}</h1>
-      <p style="font-family:Georgia,serif;font-size:17px;font-style:italic;color:#EDDDAA;margin:0;line-height:1.5;">{{ result_title }}</p>
+    <td style="padding:22px 40px 0;text-align:center;">
+      <h1 style="font-family:Georgia,serif;font-size:32px;font-weight:400;color:#FDF8F3;margin:0 0 10px;line-height:1.2;">{{ result_label }}</h1>
+      <p style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#EDDDAA;margin:0;line-height:1.5;">{{ result_title }}</p>
     </td>
   </tr>
 
-  <!-- ── Séparateur + Description ── -->
+  <!-- Description -->
   <tr>
-    <td style="padding:36px 40px;">
+    <td style="padding:32px 40px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
-      <p style="font-size:16px;line-height:1.85;color:#C5B8A3;text-align:center;padding:32px 20px 28px;margin:0;font-family:Georgia,serif;font-weight:400;">{{ result_description }}</p>
+      <p style="font-size:15px;line-height:1.85;color:#C5B8A3;text-align:center;padding:28px 10px 24px;margin:0;font-family:Georgia,serif;">{{ result_description }}</p>
+      <!-- Phrase clé -->
+      <p style="font-family:Georgia,serif;font-size:19px;font-style:italic;color:#EDDDAA;text-align:center;margin:0 0 28px;line-height:1.6;">&ldquo; {{ result_phrase }} &rdquo;</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
     </td>
   </tr>
 
-  <!-- ── Phrase clé ── -->
+  <!-- Scores -->
   <tr>
-    <td style="padding:0 40px 36px;text-align:center;">
-      <p style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:#EDDDAA;margin:0;line-height:1.6;">
-        &ldquo; {{ result_phrase }} &rdquo;
-      </p>
-    </td>
-  </tr>
-
-  <!-- ── Scores ── -->
-  <tr>
-    <td style="padding:0 40px 36px;">
-      <p style="font-size:9px;letter-spacing:4px;color:#6B5B4E;text-transform:uppercase;text-align:center;margin:0 0 24px;font-family:Georgia,serif;">Détail de vos cinq portes</p>
+    <td style="padding:0 40px 32px;">
+      <p style="font-size:9px;letter-spacing:4px;color:#6B5B4E;text-transform:uppercase;text-align:center;margin:0 0 22px;font-family:Georgia,serif;">Détail de vos cinq portes</p>
 
       <!-- Mentale -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
-          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">
-            🧠 Mentale {% if result_code == 'mental' %}<span style="color:#EDDDAA;">★</span>{% endif %}
-          </td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:20px;color:#EDDDAA;">{{ score_mental }}</td>
+          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">🧠 Mentale {% if result_code == 'mental' %}<span style="color:#EDDDAA;">★</span>{% endif %}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;color:#EDDDAA;">{{ score_mental }}</td>
         </tr>
-        <tr>
-          <td colspan="2" style="padding-top:7px;">
-            <div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;">
-              <div style="height:2px;width:{{ mental_pct }}%;background:linear-gradient(90deg,#6b7dbf,#9ba8d4);border-radius:1px;"></div>
-            </div>
-          </td>
-        </tr>
+        <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ mental_pct }}%;background:linear-gradient(90deg,#6b7dbf,#9ba8d4);border-radius:1px;"></div></div></td></tr>
       </table>
 
       <!-- Émotionnelle -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
-          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">
-            💛 Émotionnelle {% if result_code == 'emotionnel' %}<span style="color:#EDDDAA;">★</span>{% endif %}
-          </td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:20px;color:#EDDDAA;">{{ score_emotionnel }}</td>
+          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">💛 Émotionnelle {% if result_code == 'emotionnel' %}<span style="color:#EDDDAA;">★</span>{% endif %}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;color:#EDDDAA;">{{ score_emotionnel }}</td>
         </tr>
-        <tr>
-          <td colspan="2" style="padding-top:7px;">
-            <div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;">
-              <div style="height:2px;width:{{ emotionnel_pct }}%;background:linear-gradient(90deg,#DE8284,#e9a5a7);border-radius:1px;"></div>
-            </div>
-          </td>
-        </tr>
+        <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ emotionnel_pct }}%;background:linear-gradient(90deg,#DE8284,#e9a5a7);border-radius:1px;"></div></div></td></tr>
       </table>
 
       <!-- Énergétique -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
-          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">
-            ✨ Énergétique {% if result_code == 'energetique' %}<span style="color:#EDDDAA;">★</span>{% endif %}
-          </td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:20px;color:#EDDDAA;">{{ score_energetique }}</td>
+          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">✨ Énergétique {% if result_code == 'energetique' %}<span style="color:#EDDDAA;">★</span>{% endif %}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;color:#EDDDAA;">{{ score_energetique }}</td>
         </tr>
-        <tr>
-          <td colspan="2" style="padding-top:7px;">
-            <div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;">
-              <div style="height:2px;width:{{ energetique_pct }}%;background:linear-gradient(90deg,#7dbf6b,#a8d49a);border-radius:1px;"></div>
-            </div>
-          </td>
-        </tr>
+        <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ energetique_pct }}%;background:linear-gradient(90deg,#7dbf6b,#a8d49a);border-radius:1px;"></div></div></td></tr>
       </table>
 
       <!-- Sensorielle -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
-          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">
-            🌿 Sensorielle {% if result_code == 'sensoriel' %}<span style="color:#EDDDAA;">★</span>{% endif %}
-          </td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:20px;color:#EDDDAA;">{{ score_sensoriel }}</td>
+          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">🌿 Sensorielle {% if result_code == 'sensoriel' %}<span style="color:#EDDDAA;">★</span>{% endif %}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;color:#EDDDAA;">{{ score_sensoriel }}</td>
         </tr>
-        <tr>
-          <td colspan="2" style="padding-top:7px;">
-            <div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;">
-              <div style="height:2px;width:{{ sensoriel_pct }}%;background:linear-gradient(90deg,#C5B8A3,#d4cbbc);border-radius:1px;"></div>
-            </div>
-          </td>
-        </tr>
+        <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ sensoriel_pct }}%;background:linear-gradient(90deg,#C5B8A3,#d4cbbc);border-radius:1px;"></div></div></td></tr>
       </table>
 
       <!-- Physique -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">
-            🔥 Physique {% if result_code == 'physique' %}<span style="color:#EDDDAA;">★</span>{% endif %}
-          </td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:20px;color:#EDDDAA;">{{ score_physique }}</td>
+          <td style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDF8F3;font-family:Georgia,serif;">🔥 Physique {% if result_code == 'physique' %}<span style="color:#EDDDAA;">★</span>{% endif %}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;color:#EDDDAA;">{{ score_physique }}</td>
         </tr>
-        <tr>
-          <td colspan="2" style="padding-top:7px;">
-            <div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;">
-              <div style="height:2px;width:{{ physique_pct }}%;background:linear-gradient(90deg,#8C1827,#b02035);border-radius:1px;"></div>
-            </div>
-          </td>
-        </tr>
+        <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ physique_pct }}%;background:linear-gradient(90deg,#8C1827,#b02035);border-radius:1px;"></div></div></td></tr>
       </table>
     </td>
   </tr>
 
-  <!-- ── CTA ── -->
+  <!-- ── CTA Section ── -->
   <tr>
-    <td style="padding:0 40px 40px;text-align:center;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+    <td style="padding:0 40px 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.12),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
 
-      <p style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:#A0907F;margin:0 0 24px;line-height:1.7;">
-        Envie d'aller plus loin dans votre exploration intime&nbsp;?
+      <p style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:#A0907F;margin:0 0 24px;line-height:1.7;text-align:center;">
+        Envie d'aller plus loin dans votre exploration intime ?
       </p>
 
-      <!-- Bouton principal -->
-      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px;">
+      <!-- CTA 1 : Instagram -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;">
         <tr>
           <td style="background:linear-gradient(135deg,#8C1827,#b02035);padding:14px 32px;border-radius:1px;">
-            <a href="https://instagram.com/intimementnous" target="_blank" style="font-family:Georgia,serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FDF8F3;text-decoration:none;font-weight:400;">
-              Suivre Intimement Nous
+            <a href="https://instagram.com/intimementnous" target="_blank" style="font-family:Georgia,serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FDF8F3;text-decoration:none;">
+              Suivre sur Instagram
             </a>
           </td>
         </tr>
       </table>
 
-      <!-- Bouton secondaire -->
-      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+      <!-- CTA 2 : Séminaires -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;">
         <tr>
-          <td style="border:1px solid rgba(197,184,163,0.25);padding:12px 28px;border-radius:1px;">
-            <a href="#" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A0907F;text-decoration:none;">
+          <td style="border:1px solid rgba(222,130,132,0.4);padding:12px 28px;border-radius:1px;">
+            <a href="https://intimementnous.com/seminaires" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#DE8284;text-decoration:none;">
               Découvrir nos séminaires
             </a>
           </td>
         </tr>
       </table>
+
+      <!-- CTA 3 : Appel découverte -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;">
+        <tr>
+          <td style="border:1px solid rgba(197,184,163,0.25);padding:12px 28px;border-radius:1px;">
+            <a href="https://intimementnous.com/appel-decouverte" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A0907F;text-decoration:none;">
+              Réserver un appel découverte
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <!-- CTA 4 : Application -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+        <tr>
+          <td style="border:1px solid rgba(197,184,163,0.15);padding:12px 28px;border-radius:1px;">
+            <a href="https://intimementnous.com/app" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6B5B4E;text-decoration:none;">
+              Accéder à l'application
+            </a>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 
-  <!-- ── Footer ── -->
+  <!-- Footer -->
   <tr>
     <td style="padding:24px 40px 32px;border-top:1px solid rgba(197,184,163,0.08);text-align:center;background:rgba(15,8,6,0.4);">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#6B5B4E;text-transform:uppercase;margin:0 0 10px;">
-        Intimement Nous
-      </p>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#6B5B4E;text-transform:uppercase;margin:0 0 10px;">Intimement Nous</p>
       <p style="font-size:11px;color:#3D2A25;margin:0 0 8px;font-family:Georgia,serif;line-height:1.6;">
-        Cet email vous a été envoyé suite à votre participation au questionnaire.<br>
-        Vos données restent strictement confidentielles.
+        Cet email vous a été envoyé suite à votre participation au questionnaire.<br>Vos données restent strictement confidentielles.
       </p>
-      <p style="font-size:10px;color:#2A1A18;margin:0;font-family:Georgia,serif;">
-        © Intimement Nous — Tous droits réservés
-      </p>
+      <p style="font-size:10px;color:#2A1A18;margin:0;font-family:Georgia,serif;">© Intimement Nous — Tous droits réservés</p>
     </td>
   </tr>
 
-  <!-- ── Ligne déco bottom ── -->
+  <!-- Ligne déco bottom -->
   <tr>
     <td style="height:2px;background:linear-gradient(90deg,#8C1827,#DE8284,#EDDDAA,#DE8284,#8C1827);font-size:0;line-height:0;">&nbsp;</td>
   </tr>
 
 </table>
-<!-- /Conteneur email -->
-
 </td></tr>
 </table>
-<!-- /Wrapper -->
-
 </body>
 </html>

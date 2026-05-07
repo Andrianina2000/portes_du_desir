@@ -129,6 +129,17 @@ def send_result_email(session, result_data):
              session.total_score_energetique + session.total_score_sensoriel +
              session.total_score_physique) or 1
 
+    # URL absolue de l'illustration selon la porte
+    illustration_map = {
+        'mental':      'porte_mental.png',
+        'emotionnel':  'porte_emotionnel.png',
+        'energetique': 'porte_energetique.png',
+        'sensoriel':   'porte_sensoriel.png',
+        'physique':    'porte_physique.png',
+    }
+    illustration_file = illustration_map.get(session.result_code, '')
+    illustration_url = f"https://raw.githubusercontent.com/Andrianina2000/portes_du_desir/main/quiz/static/quiz/img/{illustration_file}"
+
     ctx = {
         'result_code': session.result_code,
         'result_label': result_data['label'],
@@ -147,6 +158,7 @@ def send_result_email(session, result_data):
         'physique_pct': _pct(session.total_score_physique, total),
         'participant_email': participant_email,
         'result_data': result_data,
+        'illustration_url': illustration_url,
     }
 
     subject = "Votre resultat - " + result_data['label']

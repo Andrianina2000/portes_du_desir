@@ -147,7 +147,7 @@ def qr_code_page(request):
 @require_http_methods(["GET"])
 def qr_code_image(request):
     import os
-    from PIL import Image as PILImage, ImageDraw
+    from PIL import Image as PILImage, ImageDraw, ImageFont
 
     start_url = request.build_absolute_uri(reverse('start_quiz'))
 
@@ -164,12 +164,15 @@ def qr_code_image(request):
     img = img.convert("RGBA")
     qr_w, qr_h = img.size
 
-    # Chercher le logo dans les static
+    # Chercher le logo dans plusieurs emplacements possibles
     logo_path = None
-    for candidate in [
-        os.path.join(settings.BASE_DIR, 'quiz', 'static', 'quiz', 'img', 'logo.jpg'),
+    candidates = [
         os.path.join(settings.BASE_DIR, 'quiz', 'static', 'quiz', 'img', 'logo.png'),
-    ]:
+        os.path.join(settings.BASE_DIR, 'quiz', 'static', 'quiz', 'img', 'logo.jpg'),
+        os.path.join(settings.BASE_DIR, 'staticfiles', 'quiz', 'img', 'logo.png'),
+        os.path.join(settings.BASE_DIR, 'staticfiles', 'quiz', 'img', 'logo.jpg'),
+    ]
+    for candidate in candidates:
         if os.path.exists(candidate):
             logo_path = candidate
             break
@@ -186,6 +189,35 @@ def qr_code_image(request):
             pos_y = (qr_h - bg_size) // 2
             img.paste(bg, (pos_x, pos_y), bg)
             img.paste(logo, (pos_x + padding, pos_y + padding), logo)
+        except Exception:
+            # Fallback : carré blanc avec texte "IN" au centre
+            try:
+                center_size = int(qr_w * 0.20)
+                center_bg = PILImage.new("RGBA", (center_size, center_size), (253, 248, 243, 255))
+                pos_x = (qr_w - center_size) // 2
+                pos_y = (qr_h - center_size) // 2
+                img.paste(center_bg, (pos_x, pos_y), center_bg)
+            except Exception:
+                pass
+    else:
+        # Pas de logo : carré crème élégant au centre avec initiales
+        try:
+            center_size = int(qr_w * 0.20)
+            center_bg = PILImage.new("RGBA", (center_size, center_size), (253, 248, 243, 255))
+            draw = ImageDraw.Draw(center_bg)
+            # Initiales "IN" en couleur bordeaux
+            text = "IN"
+            bbox = draw.textbbox((0, 0), text)
+            tw = bbox[2] - bbox[0]
+            th = bbox[3] - bbox[1]
+            draw.text(
+                ((center_size - tw) // 2, (center_size - th) // 2),
+                text,
+                fill=(140, 24, 39, 255)
+            )
+            pos_x = (qr_w - center_size) // 2
+            pos_y = (qr_h - center_size) // 2
+            img.paste(center_bg, (pos_x, pos_y), center_bg)
         except Exception:
             pass
 

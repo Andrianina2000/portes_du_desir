@@ -1,306 +1,92 @@
 {% extends "quiz/base.html" %}
+{% load static %}
 {% block title %}Votre résultat — Intimement Nous{% endblock %}
 
 {% block extra_head %}
 <style>
 .result-page { text-align: center; }
 
-/* ── Indicateur étape ── */
-.step-indicator {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 32px;
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--brun-leger);
-    justify-content: center;
-    font-weight: 300;
-}
-.step-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(197,184,163,0.2); }
-.step-dot.active { background: var(--sable); box-shadow: 0 0 8px rgba(237,221,170,0.5); }
+.step-indicator { display:flex; align-items:center; gap:10px; margin-bottom:32px; font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--brun-leger); justify-content:center; font-weight:300; }
+.step-dot { width:7px; height:7px; border-radius:50%; background:rgba(197,184,163,0.2); }
+.step-dot.active { background:var(--sable); box-shadow:0 0 8px rgba(237,221,170,0.5); }
 
-/* ── Eyebrow ── */
-.result-eyebrow {
-    font-size: 0.68rem;
-    letter-spacing: 0.38em;
-    text-transform: uppercase;
-    color: var(--brun-leger);
-    margin-bottom: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    font-weight: 300;
-}
-.result-eyebrow::before, .result-eyebrow::after {
-    content: '';
-    width: 22px; height: 1px;
-    background: rgba(197,184,163,0.25);
-}
+.result-eyebrow { font-size:0.68rem; letter-spacing:0.38em; text-transform:uppercase; color:var(--brun-leger); margin-bottom:36px; display:flex; align-items:center; justify-content:center; gap:14px; font-weight:300; }
+.result-eyebrow::before, .result-eyebrow::after { content:''; width:22px; height:1px; background:rgba(197,184,163,0.25); }
 
-/* ── Emoji porte ── */
-.door-emoji {
-    font-size: 3.2rem;
-    display: block;
-    margin-bottom: 20px;
-    animation: floatSlow 4s ease-in-out infinite;
-}
-
-/* ── Badge résultat ── */
-.result-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 9px 22px;
-    border: 1px solid rgba(197,184,163,0.25);
-    background: rgba(197,184,163,0.06);
-    margin-bottom: 28px;
-    border-radius: 1px;
-}
-.result-badge-dot {
-    width: 7px; height: 7px;
-    background: var(--rose);
-    border-radius: 50%;
-    animation: pulse 2.5s ease-in-out infinite;
-}
-.result-badge-text {
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--beige);
-    font-weight: 300;
-}
-
-/* ── Titre résultat ── */
-.result-main-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.8rem, 5vw, 2.8rem);
-    font-weight: 300;
-    color: var(--blanc-doux);
-    margin-bottom: 10px;
-    letter-spacing: -0.01em;
-}
-.result-subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-style: italic;
-    color: var(--sable);
-    margin-bottom: 28px;
-    line-height: 1.5;
-}
-
-/* ── Description ── */
-.result-desc {
-    max-width: 500px;
-    margin: 0 auto 32px;
-    color: var(--beige);
-    line-height: 1.85;
-    font-size: 0.97rem;
-    text-align: left;
-    font-weight: 300;
-}
-
-/* ── Grille infos ── */
-.result-info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 32px;
-    text-align: left;
-}
-.result-info-box {
-    padding: 20px 22px;
-    background: rgba(15,8,6,0.4);
-    border: 1px solid rgba(197,184,163,0.1);
-    border-radius: 2px;
-    transition: border-color 0.3s;
-}
-.result-info-box:hover { border-color: rgba(222,130,132,0.2); }
-.result-info-label {
-    font-size: 0.63rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--rose);
-    margin-bottom: 10px;
-    font-weight: 400;
-}
-.result-info-text {
-    font-size: 0.88rem;
-    color: var(--creme);
-    line-height: 1.65;
-    font-weight: 300;
-}
-
-/* ── Phrase clé ── */
-.result-phrase {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.45rem;
-    font-style: italic;
-    color: var(--sable);
-    text-align: center;
-    margin: 10px 0 36px;
-    padding: 22px 24px;
-    border-top: 1px solid rgba(197,184,163,0.12);
-    border-bottom: 1px solid rgba(197,184,163,0.12);
-    line-height: 1.6;
+/* ── Illustration de la porte ── */
+.porte-illustration {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 36px;
+    border-radius: 4px;
+    overflow: hidden;
     position: relative;
 }
-.result-phrase::before {
-    content: '❝';
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    color: rgba(222,130,132,0.25);
+.porte-illustration img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    border-radius: 3px;
+    border: 1px solid rgba(197,184,163,0.15);
+}
+.porte-illustration::after {
+    content: '';
     position: absolute;
-    top: 10px; left: 16px;
-    line-height: 1;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(transparent, var(--fond));
+    pointer-events: none;
 }
 
-/* ── Fiche perso ── */
-.fiche-perso {
-    background: rgba(197,184,163,0.04);
-    border: 1px solid rgba(197,184,163,0.14);
-    padding: 28px;
-    margin-bottom: 32px;
-    text-align: left;
-    border-radius: 2px;
-}
-.fiche-perso-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--rose);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 400;
-}
+.result-badge { display:inline-flex; align-items:center; gap:12px; padding:9px 22px; border:1px solid rgba(197,184,163,0.25); background:rgba(197,184,163,0.06); margin-bottom:24px; border-radius:1px; }
+.result-badge-dot { width:7px; height:7px; background:var(--rose); border-radius:50%; animation:pulse 2.5s ease-in-out infinite; }
+.result-badge-text { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--beige); font-weight:300; }
+
+.result-main-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,5vw,2.8rem); font-weight:300; color:var(--blanc-doux); margin-bottom:10px; }
+.result-subtitle { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--sable); margin-bottom:28px; line-height:1.5; }
+.result-desc { max-width:500px; margin:0 auto 32px; color:var(--beige); line-height:1.85; font-size:0.97rem; text-align:left; font-weight:300; }
+
+.result-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:32px; text-align:left; }
+.result-info-box { padding:20px 22px; background:rgba(15,8,6,0.4); border:1px solid rgba(197,184,163,0.1); border-radius:2px; transition:border-color 0.3s; }
+.result-info-box:hover { border-color:rgba(222,130,132,0.2); }
+.result-info-label { font-size:0.63rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; font-weight:400; }
+.result-info-text { font-size:0.88rem; color:var(--creme); line-height:1.65; font-weight:300; }
+
+.result-phrase { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-style:italic; color:var(--sable); text-align:center; margin:10px 0 36px; padding:22px 24px; border-top:1px solid rgba(197,184,163,0.12); border-bottom:1px solid rgba(197,184,163,0.12); line-height:1.6; position:relative; }
+.result-phrase::before { content:'❝'; font-family:'Cormorant Garamond',serif; font-size:2rem; color:rgba(222,130,132,0.25); position:absolute; top:10px; left:16px; line-height:1; }
+
+.fiche-perso { background:rgba(197,184,163,0.04); border:1px solid rgba(197,184,163,0.14); padding:28px; margin-bottom:32px; text-align:left; border-radius:2px; }
+.fiche-perso-title { font-size:0.65rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--rose); margin-bottom:18px; display:flex; align-items:center; gap:12px; font-weight:400; }
 .fiche-perso-title::after { content:''; flex:1; height:1px; background:rgba(197,184,163,0.15); }
-.fiche-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 11px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-.fiche-row:last-child { border-bottom: none; }
-.fiche-row-label { font-size: 0.77rem; color: var(--brun-leger); font-weight: 300; }
-.fiche-row-value { font-size: 0.88rem; color: var(--creme); font-weight: 400; }
+.fiche-row { display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.fiche-row:last-child { border-bottom:none; }
+.fiche-row-label { font-size:0.77rem; color:var(--brun-leger); font-weight:300; }
+.fiche-row-value { font-size:0.88rem; color:var(--creme); font-weight:400; }
 
-/* ── Scoring ── */
-.scoring-section { text-align: left; }
-.scoring-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--brun-leger);
-    margin-bottom: 22px;
-    text-align: center;
-    font-weight: 300;
-}
-.score-row { margin-bottom: 18px; }
-.score-row-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 9px;
-}
-.score-row-label {
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    color: var(--beige);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 300;
-}
-.score-row-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.25rem;
-    color: var(--sable);
-}
-.score-track {
-    height: 3px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 2px;
-    overflow: hidden;
-}
-.score-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
-}
-.winner-tag {
-    font-size: 0.6rem;
-    padding: 2px 8px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    border: 1px solid;
-    opacity: 0.85;
-    border-radius: 1px;
-}
+.scoring-section { text-align:left; }
+.scoring-title { font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--brun-leger); margin-bottom:22px; text-align:center; font-weight:300; }
+.score-row { margin-bottom:18px; }
+.score-row-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; }
+.score-row-label { font-size:0.82rem; letter-spacing:0.08em; color:var(--beige); display:flex; align-items:center; gap:10px; font-weight:300; }
+.score-row-value { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:var(--sable); }
+.score-track { height:3px; background:rgba(255,255,255,0.04); border-radius:2px; overflow:hidden; }
+.score-fill { height:100%; border-radius:2px; transition:width 1.4s cubic-bezier(0.16,1,0.3,1); }
+.winner-tag { font-size:0.6rem; padding:2px 8px; letter-spacing:0.15em; text-transform:uppercase; border:1px solid; opacity:0.85; border-radius:1px; }
 
-/* ── Note bene ── */
-.nb-box {
-    margin-top: 36px;
-    padding: 22px 26px;
-    background: rgba(197,184,163,0.03);
-    border-left: 2px solid rgba(222,130,132,0.25);
-    text-align: left;
-    border-radius: 0 2px 2px 0;
-}
-.nb-box p {
-    font-size: 0.82rem;
-    color: var(--brun-leger);
-    line-height: 1.75;
-    font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem;
-}
-.nb-box strong { color: var(--beige); font-weight: 400; }
+.nb-box { margin-top:36px; padding:22px 26px; background:rgba(197,184,163,0.03); border-left:2px solid rgba(222,130,132,0.25); text-align:left; border-radius:0 2px 2px 0; }
+.nb-box p { font-family:'Cormorant Garamond',serif; font-size:0.95rem; font-style:italic; color:var(--brun-leger); line-height:1.75; }
+.nb-box strong { color:var(--beige); font-weight:400; }
 
-/* ── CTA section ── */
-.result-cta-section {
-    margin-top: 44px;
-    padding-top: 36px;
-    border-top: 1px solid rgba(197,184,163,0.1);
-    text-align: center;
-}
-.result-cta-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: var(--blanc-doux);
-    margin-bottom: 8px;
-}
-.result-cta-sub {
-    font-size: 0.83rem;
-    color: var(--brun-leger);
-    margin-bottom: 28px;
-    line-height: 1.7;
-    font-weight: 300;
-}
-.result-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 20px;
-}
+.result-cta-section { margin-top:44px; padding-top:36px; border-top:1px solid rgba(197,184,163,0.1); text-align:center; }
+.result-cta-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; color:var(--blanc-doux); margin-bottom:8px; }
+.result-cta-sub { font-size:0.83rem; color:var(--brun-leger); margin-bottom:28px; line-height:1.7; font-weight:300; }
+.result-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:20px; }
 
-/* ── Animations ── */
-@keyframes revealResult {
-    from { opacity: 0; transform: scale(0.97) translateY(24px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-.result-reveal { animation: revealResult 1s cubic-bezier(0.16,1,0.3,1) both; }
-
-@media (max-width: 560px) {
-    .result-info-grid { grid-template-columns: 1fr; }
-    .result-phrase { font-size: 1.2rem; }
-}
+@keyframes revealResult { from { opacity:0; transform:scale(0.97) translateY(24px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.result-reveal { animation:revealResult 1s cubic-bezier(0.16,1,0.3,1) both; }
+@media (max-width:560px) { .result-info-grid { grid-template-columns:1fr; } .porte-illustration img { height:240px; } }
 </style>
 {% endblock %}
 
@@ -316,7 +102,21 @@
     </div>
 
     <p class="result-eyebrow">Résultat personnalisé</p>
-    <span class="door-emoji">{{ result.emoji }}</span>
+
+    <!-- ── Illustration de la porte dominante ── -->
+    <div class="porte-illustration">
+        {% if session.result_code == 'mental' %}
+            <img src="{% static 'quiz/img/porte_mental.png' %}" alt="Porte Mentale">
+        {% elif session.result_code == 'emotionnel' %}
+            <img src="{% static 'quiz/img/porte_emotionnel.png' %}" alt="Porte Émotionnelle">
+        {% elif session.result_code == 'energetique' %}
+            <img src="{% static 'quiz/img/porte_energetique.png' %}" alt="Porte Énergétique">
+        {% elif session.result_code == 'sensoriel' %}
+            <img src="{% static 'quiz/img/porte_sensoriel.png' %}" alt="Porte Sensorielle">
+        {% elif session.result_code == 'physique' %}
+            <img src="{% static 'quiz/img/porte_physique.png' %}" alt="Porte Physique">
+        {% endif %}
+    </div>
 
     <div class="result-badge">
         <div class="result-badge-dot"></div>
@@ -342,7 +142,6 @@
 
     <div class="sep"></div>
 
-    <!-- Fiche personnelle -->
     <div class="fiche-perso">
         <p class="fiche-perso-title">Votre fiche personnelle</p>
         <div class="fiche-row">
@@ -351,7 +150,7 @@
         </div>
         <div class="fiche-row">
             <span class="fiche-row-label">Porte dominante</span>
-            <span class="fiche-row-value">{{ result.emoji }} {{ result.label }}</span>
+            <span class="fiche-row-value">{{ result.label }}</span>
         </div>
         <div class="fiche-row">
             <span class="fiche-row-label">Date du test</span>
@@ -363,7 +162,6 @@
         </div>
     </div>
 
-    <!-- Scores des 5 portes -->
     <div class="scoring-section">
         <p class="scoring-title">Vos cinq portes en détail</p>
         {% for s in scores %}
@@ -384,23 +182,17 @@
         {% endfor %}
     </div>
 
-    <!-- Note bene -->
     <div class="nb-box">
-        <p>
-            <strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes de l'intimité, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien. Votre porte dominante peut évoluer avec le temps.
-        </p>
+        <p><strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes de l'intimité, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien.</p>
     </div>
 
-    <!-- Section CTA -->
     <div class="result-cta-section">
         <h2 class="result-cta-title">Aller plus loin</h2>
-        <p class="result-cta-sub">
-            Découvrez nos séminaires et accompagnements pour approfondir<br>votre connexion intime et relationnelle.
-        </p>
+        <p class="result-cta-sub">Découvrez nos séminaires et accompagnements pour approfondir votre connexion intime.</p>
         <div class="result-actions">
             <a href="https://instagram.com/intimementnous" target="_blank" class="btn btn-rose">
                 Suivre sur Instagram
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
             </a>
             <a href="{% url 'start_quiz' %}" class="btn btn-outline">Refaire le test</a>
             <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
@@ -410,7 +202,7 @@
 </div>
 {% else %}
 <div style="text-align:center;padding:72px 20px;">
-    <p class="text-muted">Aucun résultat disponible.</p>
+    <p style="color:var(--brun-leger);">Aucun résultat disponible.</p>
     <a href="{% url 'start_quiz' %}" class="btn btn-primary" style="margin-top:28px;">Recommencer</a>
 </div>
 {% endif %}

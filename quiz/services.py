@@ -117,10 +117,11 @@ def _pct(score, total):
 
 
 def send_result_email(session, result_data):
-    # Si EMAIL_HOST_USER n'est pas configure, on skippe silencieusement
-    email_user = os.environ.get('EMAIL_HOST_USER', '').strip()
+    # Vérifier via settings Django (pas os.environ directement)
+    email_user = getattr(settings, 'EMAIL_HOST_USER', '').strip()
     if not email_user:
-        return
+        email_user = os.environ.get('EMAIL_HOST_USER', '').strip()
+    # On tente l'envoi même si email_user semble vide (Railway injecte les vars au runtime)
 
     participant_email = session.participant.email
     admin_email = getattr(settings, 'ADMIN_RESULT_EMAIL', '')

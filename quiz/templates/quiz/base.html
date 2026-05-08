@@ -175,7 +175,10 @@
     <div class="page-wrapper">
         <header class="site-header">
             <a href="{% url 'home' %}" class="site-logo">
-                <img src="{% static 'quiz/img/logo.png' %}" alt="Intimement Nous">
+                <picture>
+                    <source srcset="{% static 'quiz/img/logo.webp' %}" type="image/webp">
+                    <img src="{% static 'quiz/img/logo.png' %}" alt="Intimement Nous">
+                </picture>
             </a>
             <span class="site-tagline">Découvrez votre porte d'entrée dans l'intimité</span>
             <div class="logo-ornement">

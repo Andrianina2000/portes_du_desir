@@ -1,8 +1,11 @@
+import logging
 import os
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 RESULT_CONTENT = {
     'mental': {
@@ -165,16 +168,14 @@ def send_result_email(session, result_data):
     subject = "Votre resultat - " + result_data['label']
     text_body = "Votre resultat : " + result_data['label'] + "\n" + result_data['title']
 
-    try:
-        html_body = render_to_string('quiz/email_result.html', ctx)
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[participant_email],
-            bcc=[admin_email] if admin_email else [],
-        )
-        email.attach_alternative(html_body, "text/html")
-        email.send(fail_silently=True)
-    except Exception:
-        pass
+    html_body = render_to_string('quiz/email_result.html', ctx)
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[participant_email],
+        bcc=[admin_email] if admin_email else [],
+    )
+    email.attach_alternative(html_body, "text/html")
+    email.send(fail_silently=False)
+    logger.info(f"Email résultat envoyé à {participant_email} (porte: {session.result_code})")

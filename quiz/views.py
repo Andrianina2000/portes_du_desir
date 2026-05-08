@@ -13,7 +13,10 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import StartForm
 from .models import LeadParticipant, Question, QuestionChoice, QuizAnswer, QuizSession
-from .services import RESULT_CONTENT, compute_result
+import logging
+from .services import RESULT_CONTENT, compute_result, send_result_email
+
+logger = logging.getLogger(__name__)
 
 
 @require_http_methods(["GET"])
@@ -93,6 +96,12 @@ def quiz_questions(request):
                         )
 
                 result_data = compute_result(session)
+
+            # Envoi de l'email de résultat
+            try:
+                send_result_email(session, result_data)
+            except Exception as e:
+                logger.error(f"Erreur envoi email résultat (session {session.id}): {e}")
 
             return redirect('quiz_result', session_id=session.id)
 

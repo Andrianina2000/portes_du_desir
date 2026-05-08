@@ -106,15 +106,15 @@
     <!-- ── Illustration de la porte dominante ── -->
     <div class="porte-illustration">
         {% if session.result_code == 'mental' %}
-            <img src="{% static 'quiz/img/porte_mental.png' %}" alt="Porte Mentale">
+            <img src="{% static 'quiz/img/porte_mental.jpg' %}" alt="Porte Mentale">
         {% elif session.result_code == 'emotionnel' %}
-            <img src="{% static 'quiz/img/porte_emotionnel.png' %}" alt="Porte Émotionnelle">
+            <img src="{% static 'quiz/img/porte_emotionnel.jpg' %}" alt="Porte Émotionnelle">
         {% elif session.result_code == 'energetique' %}
-            <img src="{% static 'quiz/img/porte_energetique.png' %}" alt="Porte Énergétique">
+            <img src="{% static 'quiz/img/porte_energetique.jpg' %}" alt="Porte Énergétique">
         {% elif session.result_code == 'sensoriel' %}
-            <img src="{% static 'quiz/img/porte_sensoriel.png' %}" alt="Porte Sensorielle">
+            <img src="{% static 'quiz/img/porte_sensoriel.jpg' %}" alt="Porte Sensorielle">
         {% elif session.result_code == 'physique' %}
-            <img src="{% static 'quiz/img/porte_physique.png' %}" alt="Porte Physique">
+            <img src="{% static 'quiz/img/porte_physique.jpg' %}" alt="Porte Physique">
         {% endif %}
     </div>
 

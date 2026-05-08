@@ -135,11 +135,11 @@ def send_result_email(session, result_data):
 
     # URL absolue de l'illustration selon la porte
     illustration_map = {
-        'mental':      'porte_mental.png',
-        'emotionnel':  'porte_emotionnel.png',
-        'energetique': 'porte_energetique.png',
-        'sensoriel':   'porte_sensoriel.png',
-        'physique':    'porte_physique.png',
+        'mental':      'porte_mental.jpg',
+        'emotionnel':  'porte_emotionnel.jpg',
+        'energetique': 'porte_energetique.jpg',
+        'sensoriel':   'porte_sensoriel.jpg',
+        'physique':    'porte_physique.jpg',
     }
     illustration_file = illustration_map.get(session.result_code, '')
     illustration_url = f"https://raw.githubusercontent.com/Andrianina2000/portes_du_desir/main/quiz/static/quiz/img/{illustration_file}"

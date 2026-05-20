@@ -33,4 +33,14 @@ python manage.py runserver
 
 ## Important
 
-Avant de tester l'envoi d'email, configure les variables SMTP dans `portes_du_desir/settings.py`.
+Avant de tester l'envoi d'email, configure les variables d'environnement Resend.
+
+Exemple :
+
+```env
+RESEND_API_KEY=re_xxxxxxxxx
+DEFAULT_FROM_EMAIL=Les Portes du Désir <contact@votre-domaine.com>
+ADMIN_RESULT_EMAIL=votre-adresse@gmail.com
+```
+
+Important : vérifie d'abord ton domaine dans Resend et utilise une adresse d'expédition sur ce domaine. Évite `onboarding@resend.dev` pour les tests réels vers des adresses externes comme Hotmail/Outlook.

@@ -91,9 +91,14 @@ SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Email via Resend (anymail)
+# Important: utilise un domaine vérifié Resend via DEFAULT_FROM_EMAIL.
+# L'adresse onboarding@resend.dev sert au test mais peut limiter l'envoi à d'autres destinataires.
 EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
 ANYMAIL = {
     'RESEND_API_KEY': os.environ.get('RESEND_API_KEY', ''),
 }
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Les Portes du Désir <onboarding@resend.dev>')
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    'Les Portes du Désir <contact@votre-domaine.com>'
+)
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')

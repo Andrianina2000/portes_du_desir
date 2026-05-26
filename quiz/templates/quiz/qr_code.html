@@ -3,198 +3,238 @@
 
 {% block extra_head %}
 <style>
-.qr-page { text-align: center; }
+/* Page QR corrigée : plus lumineuse, lisible et premium */
+.qr-page {
+    text-align: center;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 8px 0 28px;
+}
 
-/* ── QR container brandé ── */
+.qr-page-title {
+    margin-bottom: 8px !important;
+    font-size: clamp(3.2rem, 7vw, 5rem) !important;
+    line-height: 1.05 !important;
+}
+
+.qr-page-subtitle {
+    color: #4E3E3C !important;
+    margin: 0 auto 30px !important;
+    font-size: 1.12rem !important;
+    line-height: 1.65 !important;
+    font-weight: 500 !important;
+    max-width: 680px;
+}
+
+.qr-showcase {
+    width: min(100%, 620px);
+    margin: 0 auto 30px;
+    padding: 34px 22px 30px;
+    background: rgba(255, 253, 249, 0.96) !important;
+    border: 1px solid rgba(90, 14, 40, 0.12) !important;
+    border-radius: 28px;
+    box-shadow: 0 28px 75px rgba(63, 42, 34, 0.13);
+}
+
 .qr-outer {
     display: inline-block;
-    padding: 3px;
-    background: linear-gradient(135deg, #8C1827, #DE8284, #EDDDAA, #DE8284, #8C1827);
-    background-size: 200% 200%;
-    animation: shimmer 4s ease-in-out infinite;
-    border-radius: 3px;
-    margin: 32px 0;
+    padding: 5px;
+    background: linear-gradient(135deg, #5A0E28, #B88757, #A85F68, #5A0E28) !important;
+    border-radius: 22px !important;
+    margin: 0 0 20px !important;
+    box-shadow: 0 18px 42px rgba(90, 14, 40, 0.16);
 }
+
 .qr-inner {
-    background: #FDF8F3;
-    padding: 22px;
-    border-radius: 2px;
+    background: #FFFFFF !important;
+    padding: 24px !important;
+    border-radius: 18px !important;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
+
 .qr-inner img {
     display: block;
-    width: 220px;
-    height: 220px;
-    border-radius: 1px;
+    width: min(64vw, 280px) !important;
+    height: min(64vw, 280px) !important;
+    border-radius: 10px !important;
 }
+
 .qr-brand-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem;
-    color: #12080A;
-    letter-spacing: 0.15em;
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: 1.08rem !important;
+    color: #5A0E28 !important;
+    letter-spacing: 0.14em;
     text-align: center;
     font-style: italic;
+    margin: 0 !important;
 }
 
-/* ── URL ── */
 .qr-url {
-    font-size: 0.77rem;
-    color: var(--brun-leger);
-    word-break: break-all;
-    padding: 13px 18px;
-    background: rgba(15,8,6,0.5);
-    border: 1px solid rgba(197,184,163,0.1);
-    margin-bottom: 32px;
-    font-family: monospace;
-    border-radius: 2px;
-    letter-spacing: 0.06em;
+    display: block;
+    max-width: 760px;
+    margin: 0 auto 30px !important;
+    padding: 18px 22px !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(90, 14, 40, 0.16) !important;
+    border-radius: 14px !important;
+    color: #342629 !important;
+    font-family: 'Jost', Arial, Helvetica, sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    word-break: break-word;
+    box-shadow: 0 12px 30px rgba(63, 42, 34, 0.07);
 }
 
-/* ── Instructions ── */
-.qr-instructions { max-width: 380px; margin: 0 auto 36px; }
-.qr-instructions > p {
-    font-size: 0.87rem;
-    color: var(--brun-leger);
-    line-height: 1.75;
-    margin-bottom: 20px;
+.qr-variants {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 auto 34px !important;
+    max-width: 760px;
+}
+
+.qr-variant {
+    padding: 22px 16px !important;
+    border: 1px solid rgba(90, 14, 40, 0.12) !important;
+    background: #FFFFFF !important;
+    border-radius: 18px !important;
+    text-align: center;
+    font-size: 0.86rem !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase;
+    color: #5A0E28 !important;
+    font-weight: 700 !important;
+    line-height: 1.45 !important;
+    box-shadow: 0 14px 34px rgba(63, 42, 34, 0.08);
+}
+
+.qr-variant-icon {
+    font-size: 1.55rem !important;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.qr-instructions {
+    max-width: 660px !important;
+    margin: 0 auto 30px !important;
+    padding: 26px 28px;
+    background: rgba(255, 253, 249, 0.92);
+    border: 1px solid rgba(90, 14, 40, 0.10);
+    border-radius: 24px;
+    box-shadow: 0 18px 48px rgba(63, 42, 34, 0.08);
 }
 
 .step-list { text-align: left; }
 .step-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 42px 1fr;
     gap: 16px;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
+.step-item:last-child { margin-bottom: 0; }
 .step-num {
-    width: 28px; height: 28px;
+    width: 42px !important;
+    height: 42px !important;
     border-radius: 50%;
-    background: rgba(222,130,132,0.1);
-    border: 1px solid rgba(222,130,132,0.3);
+    background: #FFF3EA !important;
+    border: 1px solid rgba(90,14,40,0.20) !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    color: var(--rose);
+    font-size: 1rem !important;
+    color: #5A0E28 !important;
     flex-shrink: 0;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', Arial, Helvetica, sans-serif !important;
+    font-weight: 700 !important;
 }
 .step-text {
-    font-size: 0.85rem;
-    color: var(--beige);
-    padding-top: 4px;
-    line-height: 1.6;
-    font-weight: 300;
+    margin: 0 !important;
+    padding-top: 4px !important;
+    font-size: 1.05rem !important;
+    color: #342629 !important;
+    line-height: 1.7 !important;
+    font-weight: 500 !important;
 }
-
-/* ── Variantes QR ── */
-.qr-variants {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 28px 0;
-}
-.qr-variant {
-    padding: 14px 10px;
-    border: 1px solid rgba(197,184,163,0.1);
-    background: rgba(15,8,6,0.35);
-    border-radius: 2px;
-    text-align: center;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--brun-leger);
-    font-weight: 300;
-    transition: border-color 0.3s;
-}
-.qr-variant:hover { border-color: rgba(222,130,132,0.25); }
-.qr-variant-icon { font-size: 1.2rem; display: block; margin-bottom: 8px; }
 
 .print-hint {
-    font-size: 0.73rem;
-    color: var(--brun-leger);
-    margin-top: 10px;
-    font-weight: 300;
+    font-size: 0.94rem !important;
+    color: #6F5C52 !important;
+    margin-top: 12px !important;
+    font-weight: 500 !important;
     font-style: italic;
 }
 
-@media print {
-    .site-header, .result-actions, .print-hint, a.btn,
-    .qr-variants, .qr-instructions > p:first-child { display: none !important; }
-    body { background: #fff !important; }
-    body::before, body::after { display: none; }
-    .page-wrapper { padding: 20px; }
-    .qr-outer { background: #ccc; animation: none; }
-    .qr-inner { border: 1px solid #ccc; }
+.qr-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
 }
 
-@media (max-width: 480px) {
-    .qr-variants { grid-template-columns: 1fr; }
+@media print {
+    .site-header, .qr-actions, .print-hint, .qr-variants, .qr-instructions { display: none !important; }
+    body { background: #fff !important; }
+    body::before, body::after { display: none !important; }
+    .page-wrapper { padding: 20px !important; }
+    .qr-showcase { box-shadow: none !important; border: none !important; }
+}
+
+@media (max-width: 640px) {
+    .qr-page { padding: 0 0 20px; }
+    .qr-page-title { font-size: clamp(3rem, 14vw, 4.2rem) !important; }
+    .qr-page-subtitle { font-size: 1.06rem !important; padding: 0 8px; }
+    .qr-showcase { padding: 24px 14px 22px; border-radius: 22px; }
+    .qr-inner { padding: 18px !important; }
+    .qr-url { font-size: 0.92rem !important; padding: 16px !important; }
+    .qr-variants { grid-template-columns: 1fr; gap: 12px; }
+    .qr-variant { padding: 18px 14px !important; }
+    .qr-instructions { padding: 22px 18px; border-radius: 20px; }
+    .step-item { grid-template-columns: 36px 1fr; gap: 12px; }
+    .step-num { width: 36px !important; height: 36px !important; }
+    .step-text { font-size: 1rem !important; line-height: 1.65 !important; }
 }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="qr-page">
-    <h1 style="margin-bottom:10px;">Code <em>QR</em></h1>
-    <p style="color:var(--brun-leger);margin-bottom:0;font-size:0.9rem;">
-        À projeter lors du webinaire, à imprimer ou à partager en story
-    </p>
+    <h1 class="qr-page-title">Code <em>QR</em></h1>
+    <p class="qr-page-subtitle">À projeter lors du webinaire, à imprimer ou à partager en story.</p>
 
-    <!-- QR Code brandé -->
-    <div class="qr-outer">
-        <div class="qr-inner">
-            <img src="{% url 'qr_code_image' %}" alt="QR Code Intimement Nous">
-            <p class="qr-brand-label">Intimement Nous</p>
+    <div class="qr-showcase">
+        <div class="qr-outer">
+            <div class="qr-inner">
+                <img src="{% url 'qr_code_image' %}" alt="QR Code Intimement Nous">
+                <p class="qr-brand-label">Intimement Nous</p>
+            </div>
         </div>
+        <p class="qr-url">{{ start_url }}</p>
     </div>
 
-    <p class="qr-url">{{ start_url }}</p>
-
-    <!-- Variantes de format -->
     <div class="qr-variants">
-        <div class="qr-variant">
-            <span class="qr-variant-icon">🖨</span>
-            Séminaire<br>printable
-        </div>
-        <div class="qr-variant">
-            <span class="qr-variant-icon">📱</span>
-            Story<br>Instagram
-        </div>
-        <div class="qr-variant">
-            <span class="qr-variant-icon">💻</span>
-            Projection<br>webinaire
-        </div>
+        <div class="qr-variant"><span class="qr-variant-icon">🖨</span>Séminaire<br>printable</div>
+        <div class="qr-variant"><span class="qr-variant-icon">📱</span>Story<br>Instagram</div>
+        <div class="qr-variant"><span class="qr-variant-icon">💻</span>Projection<br>webinaire</div>
     </div>
 
-    <!-- Instructions -->
     <div class="qr-instructions">
         <div class="step-list">
-            <div class="step-item">
-                <div class="step-num">1</div>
-                <p class="step-text">Projetez ce QR code ou imprimez-le et distribuez-le aux participants</p>
-            </div>
-            <div class="step-item">
-                <div class="step-num">2</div>
-                <p class="step-text">Les participants le scannent et accèdent directement au questionnaire</p>
-            </div>
-            <div class="step-item">
-                <div class="step-num">3</div>
-                <p class="step-text">À la fin, ils reçoivent leur résultat par email instantanément</p>
-            </div>
-            <div class="step-item">
-                <div class="step-num">4</div>
-                <p class="step-text">Consultez le dashboard pour voir tous les résultats en temps réel</p>
-            </div>
+            <div class="step-item"><div class="step-num">1</div><p class="step-text">Projetez ce QR code ou imprimez-le et distribuez-le aux participants.</p></div>
+            <div class="step-item"><div class="step-num">2</div><p class="step-text">Les participants le scannent et accèdent directement au questionnaire.</p></div>
+            <div class="step-item"><div class="step-num">3</div><p class="step-text">À la fin, ils reçoivent leur résultat par email instantanément.</p></div>
+            <div class="step-item"><div class="step-num">4</div><p class="step-text">Consultez le dashboard pour voir tous les résultats en temps réel.</p></div>
         </div>
     </div>
 
-    <p class="print-hint">Utilisez Ctrl+P (ou Cmd+P) pour imprimer cette page en haute qualité</p>
+    <p class="print-hint">Utilisez Ctrl+P ou Cmd+P pour imprimer cette page en haute qualité.</p>
 
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;">
+    <div class="qr-actions">
         <a href="{% url 'admin_dashboard' %}" class="btn btn-outline">Voir le dashboard</a>
         <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
         <a href="javascript:window.print()" class="btn btn-ghost">Imprimer</a>

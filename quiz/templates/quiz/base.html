@@ -414,14 +414,68 @@
             .fiche-row { align-items:flex-start; gap:8px; flex-direction:column; }
         }
     </style>
+
+    <style>
+        /* Patch esthétique logo/header : suppression du carré gris du logo et réduction de la hauteur */
+        .site-header {
+            margin-bottom: 34px;
+            padding-bottom: 24px;
+            overflow: visible;
+        }
+        .site-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+        .site-logo picture {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .site-logo img {
+            display: block;
+            width: min(320px, 76vw);
+            height: auto !important;
+            max-height: 150px;
+            object-fit: contain;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            mix-blend-mode: normal;
+        }
+        .site-tagline {
+            display: block;
+            max-width: 92vw;
+            margin: 18px auto 0;
+            text-align: center;
+            overflow: visible;
+            word-break: normal;
+        }
+        @media (max-width: 640px) {
+            .site-logo img {
+                width: min(240px, 74vw);
+                max-height: 112px;
+            }
+            .site-tagline {
+                font-size: 0.68rem;
+                letter-spacing: 0.18em;
+                line-height: 1.75;
+            }
+        }
+    </style>
+
 </head>
 <body>
     <div class="page-wrapper">
         <header class="site-header">
             <a href="{% url 'home' %}" class="site-logo">
                 <picture>
-                    <source srcset="{% static 'quiz/img/logo.webp' %}" type="image/webp">
-                    <img src="{% static 'quiz/img/logo.png' %}" alt="Intimement Nous">
+                    <source srcset="{% static 'quiz/img/logo-clean.webp' %}" type="image/webp">
+                    <img src="{% static 'quiz/img/logo-clean.png' %}" alt="Intimement Nous">
                 </picture>
             </a>
             <span class="site-tagline">Découvrez votre porte d'entrée dans l'intimité</span>

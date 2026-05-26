@@ -14,7 +14,8 @@ class QuestionChoiceInline(admin.TabularInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('order', 'title', 'question_type', 'is_active')
+    list_display = ('title', 'order', 'question_type', 'is_active')
+    list_display_links = ('title',)
     list_editable = ('order', 'is_active')
     list_filter = ('is_active', 'question_type')
     search_fields = ('title', 'text')

@@ -380,8 +380,8 @@
 
 <div class="dash-header">
     <div class="dash-title">
-        <span class="admin-badge">✦ Tableau de bord</span>
-        <h1>Suivi des <em>participants</em></h1>
+        <span class="admin-badge">{{ site_texts.dashboard_badge|default:"✦ Tableau de bord"|safe }}</span>
+        <h1>{{ site_texts.dashboard_title|default:"Suivi des <em>participants</em>"|safe }}</h1>
         <p>Résultats en temps réel — {{ total_sessions }} session{{ total_sessions|pluralize }} enregistrée{{ total_sessions|pluralize }}</p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-self:flex-end;">

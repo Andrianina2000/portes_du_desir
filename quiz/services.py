@@ -87,6 +87,33 @@ RESULT_CONTENT = {
 }
 
 
+
+def _editable_text(key, default=''):
+    """Retourne un texte éditable depuis l'admin Django, avec fallback sécurisé."""
+    try:
+        from .models import SiteText
+        item = SiteText.objects.filter(key=key, is_active=True).first()
+        if item and item.content != '':
+            return item.content
+    except Exception:
+        pass
+    return default
+
+
+def get_result_content(code):
+    """Contenu d'une porte, surchargeable depuis Admin > Textes du site."""
+    base = RESULT_CONTENT.get(code, {}).copy()
+    if not base:
+        return base
+    prefix = f'result_{code}_'
+    for field in ['label', 'title', 'subtitle', 'description', 'besoins', 'conseil', 'phrase']:
+        base[field] = _editable_text(prefix + field, base.get(field, ''))
+    return base
+
+
+def get_all_result_content():
+    return {code: get_result_content(code) for code in RESULT_CONTENT.keys()}
+
 def compute_result(session):
     scores = {
         'mental': 0, 'emotionnel': 0,
@@ -108,11 +135,11 @@ def compute_result(session):
 
     best_code = max(scores, key=scores.get)
     session.result_code = best_code
-    session.result_label = RESULT_CONTENT[best_code]['label']
+    session.result_label = get_result_content(best_code)['label']
     session.completed_at = timezone.now()
     session.save()
 
-    return RESULT_CONTENT[best_code]
+    return get_result_content(best_code)
 
 
 def _pct(score, total):

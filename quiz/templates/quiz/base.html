@@ -438,9 +438,9 @@
         }
         .site-logo img {
             display: block;
-            width: min(320px, 76vw);
+            width: min(520px, 86vw);
             height: auto !important;
-            max-height: 150px;
+            max-height: 190px;
             object-fit: contain;
             background: transparent !important;
             border: 0 !important;
@@ -457,8 +457,8 @@
         }
         @media (max-width: 640px) {
             .site-logo img {
-                width: min(240px, 74vw);
-                max-height: 112px;
+                width: min(330px, 86vw);
+                max-height: 135px;
             }
             .site-tagline {
                 font-size: 0.68rem;
@@ -474,11 +474,11 @@
         <header class="site-header">
             <a href="{% url 'home' %}" class="site-logo">
                 <picture>
-                    <source srcset="{% static 'quiz/img/logo-clean.webp' %}" type="image/webp">
-                    <img src="{% static 'quiz/img/logo-clean.png' %}" alt="Intimement Nous">
+                    <source srcset="{% static 'quiz/img/logo-client.webp' %}" type="image/webp">
+                    <img src="{% static 'quiz/img/logo-client.png' %}" alt="Intimement Nous">
                 </picture>
             </a>
-            <span class="site-tagline">Découvrez votre porte d'entrée dans l'intimité</span>
+            <span class="site-tagline">{{ site_texts.site_tagline|default:"Découvrez votre porte d'entrée dans l'intimité"|safe }}</span>
             <div class="logo-ornement">
                 <div class="logo-ornement-line"></div>
                 <div class="logo-ornement-dot"></div>

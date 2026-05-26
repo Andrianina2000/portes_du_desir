@@ -75,13 +75,13 @@
         <div class="step-dot active"></div>
         <div class="step-dot"></div>
         <div class="step-dot"></div>
-        <span style="margin-left:10px;">Étape 1 sur 3</span>
+        <span style="margin-left:10px;">{{ site_texts.start_step|default:"Étape 1 sur 3"|safe }}</span>
     </div>
 
     <div class="start-intro">
-        <h1>Avant de<br><em>commencer</em></h1>
+        <h1>{{ site_texts.start_title|default:"Avant de<br><em>commencer</em>"|safe }}</h1>
         <p class="mt-4">
-            Renseignez votre email pour recevoir votre résultat personnalisé à la fin du questionnaire. Votre porte dominante vous sera révélée avec une description complète et des conseils.
+            {{ site_texts.start_description|default:"Renseignez votre email pour recevoir votre résultat personnalisé à la fin du questionnaire. Votre porte dominante vous sera révélée avec une description complète et des conseils."|safe }}
         </p>
     </div>
 
@@ -97,7 +97,7 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <label class="form-label" for="id_email">Votre adresse email</label>
+            <label class="form-label" for="id_email">{{ site_texts.start_email_label|default:"Votre adresse email"|safe }}</label>
             <input
                 type="email"
                 name="email"
@@ -127,7 +127,7 @@
 
         <div class="submit-wrap">
             <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
-                Entrer dans l'exploration
+                {{ site_texts.start_button|default:"Entrer dans l'exploration"|safe }}
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>

@@ -98,10 +98,10 @@
         <div class="step-dot"></div>
         <div class="step-dot"></div>
         <div class="step-dot active"></div>
-        <span style="margin-left:10px;">Étape 3 sur 3 — Votre résultat</span>
+        <span style="margin-left:10px;">{{ site_texts.result_step|default:"Étape 3 sur 3 — Votre résultat"|safe }}</span>
     </div>
 
-    <p class="result-eyebrow">Résultat personnalisé</p>
+    <p class="result-eyebrow">{{ site_texts.result_eyebrow|default:"Résultat personnalisé"|safe }}</p>
 
     <!-- ── Illustration de la porte dominante ── -->
     <div class="porte-illustration">
@@ -129,11 +129,11 @@
 
     <div class="result-info-grid">
         <div class="result-info-box">
-            <p class="result-info-label">Ce dont vous avez besoin</p>
+            <p class="result-info-label">{{ site_texts.result_needs_label|default:"Ce dont vous avez besoin"|safe }}</p>
             <p class="result-info-text">{{ result.besoins }}</p>
         </div>
         <div class="result-info-box">
-            <p class="result-info-label">Conseil pour votre partenaire</p>
+            <p class="result-info-label">{{ site_texts.result_partner_label|default:"Conseil pour votre partenaire"|safe }}</p>
             <p class="result-info-text">{{ result.conseil }}</p>
         </div>
     </div>
@@ -183,15 +183,15 @@
     </div>
 
     <div class="nb-box">
-        <p><strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes de l'intimité, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien.</p>
+        <p>{{ site_texts.result_note|default:"<strong>N.B.</strong> Ce résultat est une photographie de votre fonctionnement à l'instant où vous avez répondu. Il ne vous enferme pas dans une case. Nous portons tous en nous les cinq portes de l'intimité, mais certaines sont plus présentes selon les périodes de vie, les cycles, l'état émotionnel et la qualité du lien."|safe }}</p>
     </div>
 
     <div class="result-cta-section">
-        <h2 class="result-cta-title">Aller plus loin</h2>
-        <p class="result-cta-sub">Découvrez nos séminaires et accompagnements pour approfondir votre connexion intime.</p>
+        <h2 class="result-cta-title">{{ site_texts.result_cta_title|default:"Aller plus loin"|safe }}</h2>
+        <p class="result-cta-sub">{{ site_texts.result_cta_subtitle|default:"Découvrez nos séminaires et accompagnements pour approfondir votre connexion intime."|safe }}</p>
         <div class="result-actions">
             <a href="{{ instagram_url }}" target="_blank" class="btn btn-rose">
-                Suivre sur Instagram
+                {{ site_texts.result_instagram_button|default:"Suivre sur Instagram"|safe }}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
             </a>
             <a href="{% url 'start_quiz' %}" class="btn btn-outline">Refaire le test</a>

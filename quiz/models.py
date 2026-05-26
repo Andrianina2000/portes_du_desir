@@ -58,3 +58,30 @@ class QuizAnswer(models.Model):
     choice = models.ForeignKey(QuestionChoice, on_delete=models.SET_NULL, null=True, blank=True)
     answer_text = models.TextField(blank=True, default='')
     def __str__(self): return f"Session {self.session_id} - Q{self.question_id}"
+
+
+class SiteText(models.Model):
+    key = models.SlugField(
+        max_length=100,
+        unique=True,
+        help_text="Identifiant technique utilisé dans les pages. Ne pas le modifier une fois créé."
+    )
+    title = models.CharField(
+        max_length=255,
+        help_text="Nom lisible dans l'administration."
+    )
+    content = models.TextField(
+        blank=True,
+        default='',
+        help_text="Texte affiché sur le site. Vous pouvez le modifier librement."
+    )
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['title']
+        verbose_name = "Texte du site"
+        verbose_name_plural = "Textes du site"
+
+    def __str__(self):
+        return self.title

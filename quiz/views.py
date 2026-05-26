@@ -14,7 +14,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import StartForm
 from .models import LeadParticipant, Question, QuestionChoice, QuizAnswer, QuizSession
 import logging
-from .services import RESULT_CONTENT, compute_result, get_instagram_url, send_result_email
+from .services import RESULT_CONTENT, compute_result, get_all_result_content, get_instagram_url, get_result_content, send_result_email
 
 logger = logging.getLogger(__name__)
 
@@ -124,7 +124,7 @@ def quiz_questions(request):
 @require_http_methods(["GET"])
 def quiz_result(request, session_id):
     session = get_object_or_404(QuizSession, id=session_id)
-    result_data = RESULT_CONTENT.get(session.result_code)
+    result_data = get_result_content(session.result_code)
 
     total = (
         session.total_score_mental + session.total_score_emotionnel +
@@ -234,7 +234,7 @@ def admin_dashboard(request):
 
     dominant_code = max(counts, key=counts.get) if total_sessions > 0 else None
     dominant_label = (
-        RESULT_CONTENT[dominant_code]['emoji']
+        get_result_content(dominant_code)['emoji']
         if dominant_code and counts[dominant_code] > 0 else '—'
     )
 
@@ -246,5 +246,5 @@ def admin_dashboard(request):
         'counts': counts,
         'pcts': pcts,
         'dominant_label': dominant_label,
-        'RESULT_CONTENT': RESULT_CONTENT,
+        'RESULT_CONTENT': get_all_result_content(),
     })

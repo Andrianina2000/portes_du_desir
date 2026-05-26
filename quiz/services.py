@@ -119,6 +119,18 @@ def _pct(score, total):
     return round(score * 100 / total) if total > 0 else 0
 
 
+
+
+def get_instagram_url(result_code):
+    mapping = {
+        'mental': getattr(settings, 'INSTAGRAM_MENTAL_URL', ''),
+        'emotionnel': getattr(settings, 'INSTAGRAM_EMOTIONNEL_URL', ''),
+        'energetique': getattr(settings, 'INSTAGRAM_ENERGETIQUE_URL', ''),
+        'sensoriel': getattr(settings, 'INSTAGRAM_SENSORIEL_URL', ''),
+        'physique': getattr(settings, 'INSTAGRAM_PHYSIQUE_URL', ''),
+    }
+    return mapping.get(result_code) or getattr(settings, 'INSTAGRAM_URL', 'https://instagram.com/intimementnous')
+
 def send_result_email(session, result_data):
     # Vérifier via settings Django (pas os.environ directement)
     email_user = getattr(settings, 'EMAIL_HOST_USER', '').strip()
@@ -163,6 +175,7 @@ def send_result_email(session, result_data):
         'participant_email': participant_email,
         'result_data': result_data,
         'illustration_url': illustration_url,
+        'instagram_url': get_instagram_url(session.result_code),
     }
 
     subject = "Votre resultat - " + result_data['label']

@@ -90,15 +90,31 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Email via Resend (anymail)
-# Important: utilise un domaine vérifié Resend via DEFAULT_FROM_EMAIL.
-# L'adresse onboarding@resend.dev sert au test mais peut limiter l'envoi à d'autres destinataires.
-EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
-ANYMAIL = {
-    'RESEND_API_KEY': os.environ.get('RESEND_API_KEY', ''),
-}
-DEFAULT_FROM_EMAIL = os.environ.get(
-    'DEFAULT_FROM_EMAIL',
-    'Les Portes du Désir <contact@votre-domaine.com>'
-)
+# Email
+# Priorité : SMTP Gmail si EMAIL_HOST_USER + EMAIL_HOST_PASSWORD sont renseignés.
+# Sinon fallback Resend (utile si RESEND_API_KEY est configuré).
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '').strip()
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').strip()
+
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+else:
+    EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+    ANYMAIL = {
+        'RESEND_API_KEY': os.environ.get('RESEND_API_KEY', ''),
+    }
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Les Portes du Désir <onboarding@resend.dev>')
+
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')
+
+# Liens configurables : à remplacer dans Railway par les vrais liens fournis par la cliente.
+INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://instagram.com/intimementnous')
+INSTAGRAM_MENTAL_URL = os.environ.get('INSTAGRAM_MENTAL_URL', INSTAGRAM_URL)
+INSTAGRAM_EMOTIONNEL_URL = os.environ.get('INSTAGRAM_EMOTIONNEL_URL', INSTAGRAM_URL)
+INSTAGRAM_ENERGETIQUE_URL = os.environ.get('INSTAGRAM_ENERGETIQUE_URL', INSTAGRAM_URL)
+INSTAGRAM_SENSORIEL_URL = os.environ.get('INSTAGRAM_SENSORIEL_URL', INSTAGRAM_URL)
+INSTAGRAM_PHYSIQUE_URL = os.environ.get('INSTAGRAM_PHYSIQUE_URL', INSTAGRAM_URL)

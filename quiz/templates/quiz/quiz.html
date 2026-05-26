@@ -11,7 +11,7 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 24px;
-    font-size: 0.68rem;
+    font-size: 0.82rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--brun-leger);
@@ -25,7 +25,7 @@
 .progress-info {
     display: flex;
     justify-content: space-between;
-    font-size: 0.68rem;
+    font-size: 0.82rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--brun-leger);
@@ -64,7 +64,7 @@
 .question-block:last-of-type { border-bottom: none; }
 
 .question-num {
-    font-size: 0.65rem;
+    font-size: 0.82rem;
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--rose);
@@ -75,7 +75,7 @@
 
 .question-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-size: 1.75rem;
     font-weight: 400;
     color: var(--blanc-doux);
     margin-bottom: 8px;
@@ -83,7 +83,7 @@
 }
 
 .question-text {
-    font-size: 0.87rem;
+    font-size: 1.18rem;
     color: var(--brun-leger);
     margin-bottom: 24px;
     line-height: 1.7;
@@ -100,7 +100,7 @@
 }
 
 .submit-note {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: var(--brun-leger);
     margin-top: 16px;
     letter-spacing: 0.12em;
@@ -121,8 +121,10 @@
 }
 
 @media (max-width: 600px) {
-    .question-block { padding: 28px 0; }
-    .question-title { font-size: 1.2rem; }
+    .question-block { padding: 30px 0; }
+    .question-title { font-size: 1.55rem; }
+    .question-text { font-size: 1.12rem; }
+    .step-indicator { font-size: 0.78rem; letter-spacing: 0.14em; flex-wrap: wrap; }
 }
 </style>
 {% endblock %}

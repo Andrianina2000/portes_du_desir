@@ -1,5 +1,4 @@
 import csv
-import threading
 from io import BytesIO
 
 import qrcode
@@ -15,7 +14,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import StartForm
 from .models import LeadParticipant, Question, QuestionChoice, QuizAnswer, QuizSession
 import logging
-from .services import RESULT_CONTENT, compute_result, send_result_email
+from .services import RESULT_CONTENT, compute_result, get_instagram_url, send_result_email
 
 logger = logging.getLogger(__name__)
 
@@ -98,14 +97,14 @@ def quiz_questions(request):
 
                 result_data = compute_result(session)
 
-            # Envoi de l'email en arrière-plan (evite le timeout gunicorn)
-            def _send_email():
-                try:
-                    send_result_email(session, result_data)
-                except Exception as e:
-                    logger.error(f"Erreur envoi email résultat (session {session.id}): {e}")
-
-            threading.Thread(target=_send_email, daemon=True).start()
+            # Envoi fiable avant la redirection : évite les threads daemon qui peuvent être coupés
+            # trop tôt sur Railway/Gunicorn et provoquer "aucun mail reçu".
+            try:
+                send_result_email(session, result_data)
+                messages.success(request, "Votre résultat a bien été généré et envoyé par email.")
+            except Exception as e:
+                logger.exception(f"Erreur envoi email résultat (session {session.id})")
+                messages.warning(request, "Votre résultat est affiché ci-dessous, mais l'email n'a pas pu être envoyé. Vérifiez la configuration email.")
 
             return redirect('quiz_result', session_id=session.id)
 
@@ -148,6 +147,7 @@ def quiz_result(request, session_id):
         'session': session,
         'result': result_data,
         'scores': scores_sorted,
+        'instagram_url': get_instagram_url(session.result_code),
     })
 
 

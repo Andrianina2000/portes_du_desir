@@ -46,13 +46,13 @@
 
 .result-main-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,5vw,2.8rem); font-weight:300; color:var(--blanc-doux); margin-bottom:10px; }
 .result-subtitle { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--sable); margin-bottom:28px; line-height:1.5; }
-.result-desc { max-width:500px; margin:0 auto 32px; color:var(--beige); line-height:1.85; font-size:0.97rem; text-align:left; font-weight:300; }
+.result-desc { max-width:640px; margin:0 auto 32px; color:var(--beige); line-height:1.9; font-size:1.14rem; text-align:left; font-weight:300; }
 
 .result-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:32px; text-align:left; }
 .result-info-box { padding:20px 22px; background:rgba(15,8,6,0.4); border:1px solid rgba(197,184,163,0.1); border-radius:2px; transition:border-color 0.3s; }
 .result-info-box:hover { border-color:rgba(222,130,132,0.2); }
 .result-info-label { font-size:0.63rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; font-weight:400; }
-.result-info-text { font-size:0.88rem; color:var(--creme); line-height:1.65; font-weight:300; }
+.result-info-text { font-size:1.02rem; color:var(--creme); line-height:1.65; font-weight:300; }
 
 .result-phrase { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-style:italic; color:var(--sable); text-align:center; margin:10px 0 36px; padding:22px 24px; border-top:1px solid rgba(197,184,163,0.12); border-bottom:1px solid rgba(197,184,163,0.12); line-height:1.6; position:relative; }
 .result-phrase::before { content:'❝'; font-family:'Cormorant Garamond',serif; font-size:2rem; color:rgba(222,130,132,0.25); position:absolute; top:10px; left:16px; line-height:1; }
@@ -62,14 +62,14 @@
 .fiche-perso-title::after { content:''; flex:1; height:1px; background:rgba(197,184,163,0.15); }
 .fiche-row { display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
 .fiche-row:last-child { border-bottom:none; }
-.fiche-row-label { font-size:0.77rem; color:var(--brun-leger); font-weight:300; }
-.fiche-row-value { font-size:0.88rem; color:var(--creme); font-weight:400; }
+.fiche-row-label { font-size:0.92rem; color:var(--brun-leger); font-weight:300; }
+.fiche-row-value { font-size:1.02rem; color:var(--creme); font-weight:400; }
 
 .scoring-section { text-align:left; }
 .scoring-title { font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--brun-leger); margin-bottom:22px; text-align:center; font-weight:300; }
 .score-row { margin-bottom:18px; }
 .score-row-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; }
-.score-row-label { font-size:0.82rem; letter-spacing:0.08em; color:var(--beige); display:flex; align-items:center; gap:10px; font-weight:300; }
+.score-row-label { font-size:1rem; letter-spacing:0.08em; color:var(--beige); display:flex; align-items:center; gap:10px; font-weight:300; }
 .score-row-value { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:var(--sable); }
 .score-track { height:3px; background:rgba(255,255,255,0.04); border-radius:2px; overflow:hidden; }
 .score-fill { height:100%; border-radius:2px; transition:width 1.4s cubic-bezier(0.16,1,0.3,1); }
@@ -81,7 +81,7 @@
 
 .result-cta-section { margin-top:44px; padding-top:36px; border-top:1px solid rgba(197,184,163,0.1); text-align:center; }
 .result-cta-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; color:var(--blanc-doux); margin-bottom:8px; }
-.result-cta-sub { font-size:0.83rem; color:var(--brun-leger); margin-bottom:28px; line-height:1.7; font-weight:300; }
+.result-cta-sub { font-size:1rem; color:var(--brun-leger); margin-bottom:28px; line-height:1.7; font-weight:300; }
 .result-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:20px; }
 
 @keyframes revealResult { from { opacity:0; transform:scale(0.97) translateY(24px); } to { opacity:1; transform:scale(1) translateY(0); } }
@@ -190,7 +190,7 @@
         <h2 class="result-cta-title">Aller plus loin</h2>
         <p class="result-cta-sub">Découvrez nos séminaires et accompagnements pour approfondir votre connexion intime.</p>
         <div class="result-actions">
-            <a href="https://instagram.com/intimementnous" target="_blank" class="btn btn-rose">
+            <a href="{{ instagram_url }}" target="_blank" class="btn btn-rose">
                 Suivre sur Instagram
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
             </a>

@@ -1,4 +1,5 @@
 import csv
+import threading
 from io import BytesIO
 
 import qrcode
@@ -97,18 +98,19 @@ def quiz_questions(request):
 
                 result_data = compute_result(session)
 
-            # Envoi fiable avant la redirection : évite les threads daemon qui peuvent être coupés
-            # trop tôt sur Railway/Gunicorn et provoquer "aucun mail reçu".
-            try:
-                send_result_email(session, result_data)
-                messages.success(request, "Votre résultat a bien été généré et envoyé par email.")
-            except Exception as e:
-                logger.exception(f"Erreur envoi email résultat (session {session.id})")
-                messages.warning(request, "Votre résultat est affiché ci-dessous, mais l'email n'a pas pu être envoyé. Vérifiez la configuration email.")
+            # Envoi en arrière-plan pour ne pas bloquer gunicorn
+            def _send_email():
+                try:
+                    send_result_email(session, result_data)
+                except Exception as e:
+                    logger.error(f"Erreur envoi email résultat (session {session.id}): {e}")
+
+            threading.Thread(target=_send_email, daemon=True).start()
 
             return redirect('quiz_result', session_id=session.id)
 
         except Exception as e:
+            logger.exception(f"Erreur quiz_questions (session {session_id})")
             messages.error(request, "Une erreur est survenue. Veuillez réessayer.")
             return render(request, 'quiz/quiz.html', {
                 'session': session,
@@ -135,11 +137,11 @@ def quiz_result(request, session_id):
     def pct(v): return round(v * 100 / total)
 
     scores = [
-        {'code': 'mental', 'label': 'Mentale', 'score': session.total_score_mental, 'pct': pct(session.total_score_mental), 'color': '#6b7dbf'},
-        {'code': 'emotionnel', 'label': 'Emotionnelle', 'score': session.total_score_emotionnel, 'pct': pct(session.total_score_emotionnel), 'color': '#bf6b7d'},
-        {'code': 'energetique', 'label': 'Energetique', 'score': session.total_score_energetique, 'pct': pct(session.total_score_energetique), 'color': '#7dbf6b'},
-        {'code': 'sensoriel', 'label': 'Sensorielle', 'score': session.total_score_sensoriel, 'pct': pct(session.total_score_sensoriel), 'color': '#bf9b6b'},
-        {'code': 'physique', 'label': 'Physique', 'score': session.total_score_physique, 'pct': pct(session.total_score_physique), 'color': '#bf6b6b'},
+        {'code': 'mental',      'label': 'Mentale',       'score': session.total_score_mental,      'pct': pct(session.total_score_mental),      'color': '#6b7dbf'},
+        {'code': 'emotionnel',  'label': 'Emotionnelle',  'score': session.total_score_emotionnel,  'pct': pct(session.total_score_emotionnel),  'color': '#bf6b7d'},
+        {'code': 'energetique', 'label': 'Energetique',   'score': session.total_score_energetique, 'pct': pct(session.total_score_energetique), 'color': '#7dbf6b'},
+        {'code': 'sensoriel',   'label': 'Sensorielle',   'score': session.total_score_sensoriel,   'pct': pct(session.total_score_sensoriel),   'color': '#bf9b6b'},
+        {'code': 'physique',    'label': 'Physique',      'score': session.total_score_physique,    'pct': pct(session.total_score_physique),    'color': '#bf6b6b'},
     ]
     scores_sorted = sorted(scores, key=lambda x: x['score'], reverse=True)
 
@@ -177,15 +179,12 @@ def qr_code_image(request):
         buffer.seek(0)
         return HttpResponse(buffer.getvalue(), content_type='image/png')
     except Exception as e:
-        # Fallback : image 1x1 transparente pour ne pas crasher
         from PIL import Image as PILImage
         img = PILImage.new('RGB', (400, 400), color=(253, 248, 243))
         buffer = BytesIO()
         img.save(buffer, format='PNG')
         buffer.seek(0)
         return HttpResponse(buffer.getvalue(), content_type='image/png')
-
-
 
 
 @require_http_methods(["GET"])

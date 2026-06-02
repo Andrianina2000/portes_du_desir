@@ -173,7 +173,8 @@ def send_result_email(session, result_data):
         'physique':    'porte_physique.jpg',
     }
     illustration_file = illustration_map.get(session.result_code, '')
-    illustration_url = f"https://raw.githubusercontent.com/Andrianina2000/portes_du_desir/main/quiz/static/quiz/img/{illustration_file}"
+    site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
+    illustration_url = f"{site_url}/static/quiz/img/{illustration_file}"
 
     ctx = {
         'result_code': session.result_code,

@@ -1,5 +1,4 @@
 import csv
-import threading
 from io import BytesIO
 
 import qrcode
@@ -98,14 +97,13 @@ def quiz_questions(request):
 
                 result_data = compute_result(session)
 
-            # Envoi en arrière-plan pour ne pas bloquer gunicorn
-            def _send_email():
-                try:
-                    send_result_email(session, result_data)
-                except Exception as e:
-                    logger.error(f"Erreur envoi email résultat (session {session.id}): {e}")
-
-            threading.Thread(target=_send_email, daemon=True).start()
+            print(f"[EMAIL] Tentative envoi a {session.participant.email}", flush=True)
+            try:
+                send_result_email(session, result_data)
+                print(f"[EMAIL] Succes !", flush=True)
+            except Exception as e:
+                print(f"[EMAIL ERROR] {e}", flush=True)
+                logger.error(f"Erreur envoi email (session {session.id}): {e}")
 
             return redirect('quiz_result', session_id=session.id)
 

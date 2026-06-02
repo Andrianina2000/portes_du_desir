@@ -31,25 +31,6 @@
     </td>
   </tr>
 
-  <!-- Illustration de la porte dominante -->
-  <tr>
-    <td style="padding:0 0 0 0;text-align:center;">
-      {% if result_code == 'mental' %}
-      <img src="{{ illustration_url }}" alt="Porte Mentale" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
-      {% elif result_code == 'emotionnel' %}
-      <img src="{{ illustration_url }}" alt="Porte Émotionnelle" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
-      {% elif result_code == 'energetique' %}
-      <img src="{{ illustration_url }}" alt="Porte Énergétique" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
-      {% elif result_code == 'sensoriel' %}
-      <img src="{{ illustration_url }}" alt="Porte Sensorielle" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
-      {% elif result_code == 'physique' %}
-      <img src="{{ illustration_url }}" alt="Porte Physique" width="580" style="width:100%;max-width:580px;display:block;border:0;height:280px;object-fit:cover;object-position:top center;">
-      {% endif %}
-      <!-- Dégradé sur l'image -->
-      <div style="height:40px;background:linear-gradient(transparent,#FFFDF9);margin-top:-40px;position:relative;z-index:1;"></div>
-    </td>
-  </tr>
-
   <!-- Badge résultat -->
   <tr>
     <td style="padding:20px 40px 0;text-align:center;">

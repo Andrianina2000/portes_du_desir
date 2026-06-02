@@ -1,7 +1,6 @@
 import logging
 import os
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -87,7 +86,6 @@ RESULT_CONTENT = {
 }
 
 
-
 def _editable_text(key, default=''):
     """Retourne un texte éditable depuis l'admin Django, avec fallback sécurisé."""
     try:
@@ -113,6 +111,7 @@ def get_result_content(code):
 
 def get_all_result_content():
     return {code: get_result_content(code) for code in RESULT_CONTENT.keys()}
+
 
 def compute_result(session):
     scores = {
@@ -146,8 +145,6 @@ def _pct(score, total):
     return round(score * 100 / total) if total > 0 else 0
 
 
-
-
 def get_instagram_url(result_code):
     mapping = {
         'mental': getattr(settings, 'INSTAGRAM_MENTAL_URL', ''),
@@ -158,12 +155,10 @@ def get_instagram_url(result_code):
     }
     return mapping.get(result_code) or getattr(settings, 'INSTAGRAM_URL', 'https://www.instagram.com/intimementtoi/')
 
+
 def send_result_email(session, result_data):
-    # Vérifier via settings Django (pas os.environ directement)
-    email_user = getattr(settings, 'EMAIL_HOST_USER', '').strip()
-    if not email_user:
-        email_user = os.environ.get('EMAIL_HOST_USER', '').strip()
-    # On tente l'envoi même si email_user semble vide (Railway injecte les vars au runtime)
+    import sendgrid
+    from sendgrid.helpers.mail import Mail
 
     participant_email = session.participant.email
     admin_email = getattr(settings, 'ADMIN_RESULT_EMAIL', '')
@@ -172,7 +167,6 @@ def send_result_email(session, result_data):
              session.total_score_energetique + session.total_score_sensoriel +
              session.total_score_physique) or 1
 
-    # URL absolue de l'illustration selon la porte
     illustration_map = {
         'mental':      'porte_mental.jpg',
         'emotionnel':  'porte_emotionnel.jpg',
@@ -205,17 +199,22 @@ def send_result_email(session, result_data):
         'instagram_url': get_instagram_url(session.result_code),
     }
 
-    subject = "Votre resultat - " + result_data['label']
+    html_body = render_to_string('quiz/email_result.html', ctx)
     text_body = "Votre resultat : " + result_data['label'] + "\n" + result_data['title']
 
-    html_body = render_to_string('quiz/email_result.html', ctx)
-    email = EmailMultiAlternatives(
-        subject=subject,
-        body=text_body,
+    sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
+
+    message = Mail(
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[participant_email],
-        bcc=[admin_email] if admin_email else [],
+        to_emails=participant_email,
+        subject="Votre resultat - " + result_data['label'],
+        html_content=html_body,
+        plain_text_content=text_body,
     )
-    email.attach_alternative(html_body, "text/html")
-    email.send(fail_silently=False)
+
+    if admin_email:
+        from sendgrid.helpers.mail import Bcc
+        message.add_bcc(admin_email)
+
+    sg.send(message)
     logger.info(f"Email résultat envoyé à {participant_email} (porte: {session.result_code})")

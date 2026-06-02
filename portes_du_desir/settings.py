@@ -92,23 +92,9 @@ SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Email
-# Priorité : SMTP Gmail si EMAIL_HOST_USER + EMAIL_HOST_PASSWORD sont renseignés.
-# Sinon fallback Resend (utile si RESEND_API_KEY est configuré).
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '').strip()
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').strip()
-
-if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
-    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
-    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
-else:
-    EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
-    ANYMAIL = {
-        'RESEND_API_KEY': os.environ.get('RESEND_API_KEY', ''),
-    }
-    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Les Portes du Désir <onboarding@resend.dev>')
+# SendGrid pour l'envoi d'emails
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'consultingyaba@gmail.com')
 
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')
 

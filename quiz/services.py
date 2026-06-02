@@ -87,7 +87,6 @@ RESULT_CONTENT = {
 
 
 def _editable_text(key, default=''):
-    """Retourne un texte éditable depuis l'admin Django, avec fallback sécurisé."""
     try:
         from .models import SiteText
         item = SiteText.objects.filter(key=key, is_active=True).first()
@@ -99,7 +98,6 @@ def _editable_text(key, default=''):
 
 
 def get_result_content(code):
-    """Contenu d'une porte, surchargeable depuis Admin > Textes du site."""
     base = RESULT_CONTENT.get(code, {}).copy()
     if not base:
         return base
@@ -216,5 +214,5 @@ def send_result_email(session, result_data):
         from sendgrid.helpers.mail import Bcc
         message.add_bcc(admin_email)
 
-    sg.send(message)
-    logger.info(f"Email résultat envoyé à {participant_email} (porte: {session.result_code})")
+    response = sg.send(message)
+    logger.info(f"Email SendGrid envoye a {participant_email} - status: {response.status_code}")

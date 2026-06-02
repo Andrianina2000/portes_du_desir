@@ -92,14 +92,14 @@ SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Email
-# SendGrid pour l'envoi d'emails
+# SendGrid - envoi direct via API dans services.py
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'consultingyaba@gmail.com')
 
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')
 
 # Liens configurables : à remplacer dans Railway par les vrais liens fournis par la cliente.
-INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://instagram.com/intimementnous')
+INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/intimementtoi/')
 INSTAGRAM_MENTAL_URL = os.environ.get('INSTAGRAM_MENTAL_URL', INSTAGRAM_URL)
 INSTAGRAM_EMOTIONNEL_URL = os.environ.get('INSTAGRAM_EMOTIONNEL_URL', INSTAGRAM_URL)
 INSTAGRAM_ENERGETIQUE_URL = os.environ.get('INSTAGRAM_ENERGETIQUE_URL', INSTAGRAM_URL)

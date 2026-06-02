@@ -154,9 +154,58 @@ def get_instagram_url(result_code):
     return mapping.get(result_code) or getattr(settings, 'INSTAGRAM_URL', 'https://www.instagram.com/intimementtoi/')
 
 
+def _find_illustration_path(filename):
+    """
+    Retrouve l'image dans les dossiers static possibles.
+    Objectif : l'attacher directement dans l'email avec SendGrid inline CID,
+    pour eviter que Gmail/Outlook bloque une image externe.
+    """
+    if not filename:
+        return None
+
+    # Recherche Django officielle dans les fichiers static.
+    try:
+        from django.contrib.staticfiles import finders
+        found = finders.find(f'quiz/img/{filename}')
+        if found and os.path.exists(found):
+            return found
+    except Exception:
+        pass
+
+    base_dir = getattr(settings, 'BASE_DIR', '')
+    static_root = getattr(settings, 'STATIC_ROOT', '')
+
+    candidates = []
+    if base_dir:
+        candidates.extend([
+            os.path.join(base_dir, 'quiz', 'static', 'quiz', 'img', filename),
+            os.path.join(base_dir, 'static', 'quiz', 'img', filename),
+            os.path.join(base_dir, 'staticfiles', 'quiz', 'img', filename),
+        ])
+    if static_root:
+        candidates.append(os.path.join(static_root, 'quiz', 'img', filename))
+
+    for path in candidates:
+        if path and os.path.exists(path):
+            return path
+
+    return None
+
+
 def send_result_email(session, result_data):
+    import base64
+    import mimetypes
     import sendgrid
-    from sendgrid.helpers.mail import Mail
+    from sendgrid.helpers.mail import (
+        Attachment,
+        Bcc,
+        ContentId,
+        Disposition,
+        FileContent,
+        FileName,
+        FileType,
+        Mail,
+    )
 
     participant_email = session.participant.email
     admin_email = getattr(settings, 'ADMIN_RESULT_EMAIL', '')
@@ -166,15 +215,25 @@ def send_result_email(session, result_data):
              session.total_score_physique) or 1
 
     illustration_map = {
-        'mental':      'porte_mental.jpg',
-        'emotionnel':  'porte_emotionnel.jpg',
+        'mental': 'porte_mental.jpg',
+        'emotionnel': 'porte_emotionnel.jpg',
         'energetique': 'porte_energetique.jpg',
-        'sensoriel':   'porte_sensoriel.jpg',
-        'physique':    'porte_physique.jpg',
+        'sensoriel': 'porte_sensoriel.jpg',
+        'physique': 'porte_physique.jpg',
     }
+
     illustration_file = illustration_map.get(session.result_code, '')
-    site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
-    illustration_url = f"{site_url}/static/quiz/img/{illustration_file}"
+    illustration_path = _find_illustration_path(illustration_file)
+    illustration_cid = 'result_illustration'
+
+    # Si l'image existe localement, on l'integre dans l'email avec cid.
+    # Sinon, fallback vers l'URL static pour ne pas casser totalement le rendu.
+    if illustration_path:
+        illustration_url = f'cid:{illustration_cid}'
+    else:
+        site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
+        illustration_url = f"{site_url}/static/quiz/img/{illustration_file}"
+        logger.warning(f"Image email introuvable localement : {illustration_file}")
 
     ctx = {
         'result_code': session.result_code,
@@ -211,9 +270,22 @@ def send_result_email(session, result_data):
         plain_text_content=text_body,
     )
 
+    if illustration_path:
+        mime_type = mimetypes.guess_type(illustration_path)[0] or 'image/jpeg'
+        with open(illustration_path, 'rb') as image_file:
+            encoded_image = base64.b64encode(image_file.read()).decode()
+
+        attachment = Attachment(
+            FileContent(encoded_image),
+            FileName(illustration_file),
+            FileType(mime_type),
+            Disposition('inline'),
+            ContentId(illustration_cid),
+        )
+        message.add_attachment(attachment)
+
     if admin_email:
-        from sendgrid.helpers.mail import Bcc
-        message.add_bcc(admin_email)
+        message.add_bcc(Bcc(admin_email))
 
     response = sg.send(message)
     logger.info(f"Email SendGrid envoye a {participant_email} - status: {response.status_code}")

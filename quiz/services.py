@@ -156,7 +156,7 @@ def get_instagram_url(result_code):
         'sensoriel': getattr(settings, 'INSTAGRAM_SENSORIEL_URL', ''),
         'physique': getattr(settings, 'INSTAGRAM_PHYSIQUE_URL', ''),
     }
-    return mapping.get(result_code) or getattr(settings, 'INSTAGRAM_URL', 'https://instagram.com/intimementnous')
+    return mapping.get(result_code) or getattr(settings, 'INSTAGRAM_URL', 'https://www.instagram.com/intimementtoi/')
 
 def send_result_email(session, result_data):
     # Vérifier via settings Django (pas os.environ directement)

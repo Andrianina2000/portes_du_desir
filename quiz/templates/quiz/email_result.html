@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Votre résultat — Intimement Nous</title>
+<title>Votre résultat — Intimement Toi</title>
 </head>
 <body style="margin:0;padding:0;background:#FBF3EA;font-family:Arial,Helvetica,sans-serif;">
 
@@ -22,7 +22,7 @@
     <td style="text-align:center;padding:44px 40px 28px;">
       <div style="margin-bottom:6px;">
         <span style="font-family:Georgia,serif;font-size:22px;letter-spacing:8px;color:#342629;text-transform:uppercase;font-weight:400;">Intimement</span>
-        <span style="font-family:Georgia,serif;font-size:26px;color:#A85F68;font-style:italic;letter-spacing:2px;font-weight:400;"> Nous</span>
+        <span style="font-family:Georgia,serif;font-size:26px;color:#A85F68;font-style:italic;letter-spacing:2px;font-weight:400;"> Toi</span>
       </div>
       <p style="font-size:10px;letter-spacing:5px;color:#6F5C52;text-transform:uppercase;margin:8px 0 0;font-family:Georgia,serif;">Votre résultat personnalisé</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;">
@@ -59,7 +59,6 @@
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
       <p style="font-size:17px;line-height:1.9;color:#342629;text-align:center;padding:28px 10px 24px;margin:0;font-family:Georgia,serif;">{{ result_description }}</p>
-      <!-- Phrase clé -->
       <p style="font-family:Georgia,serif;font-size:19px;font-style:italic;color:#B88757;text-align:center;margin:0 0 28px;line-height:1.6;">&ldquo; {{ result_phrase }} &rdquo;</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
@@ -72,7 +71,6 @@
     <td style="padding:0 40px 32px;">
       <p style="font-size:9px;letter-spacing:4px;color:#6F5C52;text-transform:uppercase;text-align:center;margin:0 0 22px;font-family:Georgia,serif;">Détail de vos cinq portes</p>
 
-      <!-- Mentale -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
           <td style="font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#342629;font-family:Arial,Helvetica,sans-serif;font-weight:700;">🧠 Mentale {% if result_code == 'mental' %}<span style="color:#B88757;">★</span>{% endif %}</td>
@@ -81,7 +79,6 @@
         <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ mental_pct }}%;background:linear-gradient(90deg,#6b7dbf,#9ba8d4);border-radius:1px;"></div></div></td></tr>
       </table>
 
-      <!-- Émotionnelle -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
           <td style="font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#342629;font-family:Arial,Helvetica,sans-serif;font-weight:700;">💛 Émotionnelle {% if result_code == 'emotionnel' %}<span style="color:#B88757;">★</span>{% endif %}</td>
@@ -90,7 +87,6 @@
         <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ emotionnel_pct }}%;background:linear-gradient(90deg,#A85F68,#e9a5a7);border-radius:1px;"></div></div></td></tr>
       </table>
 
-      <!-- Énergétique -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
           <td style="font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#342629;font-family:Arial,Helvetica,sans-serif;font-weight:700;">✨ Énergétique {% if result_code == 'energetique' %}<span style="color:#B88757;">★</span>{% endif %}</td>
@@ -99,7 +95,6 @@
         <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ energetique_pct }}%;background:linear-gradient(90deg,#7dbf6b,#a8d49a);border-radius:1px;"></div></div></td></tr>
       </table>
 
-      <!-- Sensorielle -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
         <tr>
           <td style="font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#342629;font-family:Arial,Helvetica,sans-serif;font-weight:700;">🌿 Sensorielle {% if result_code == 'sensoriel' %}<span style="color:#B88757;">★</span>{% endif %}</td>
@@ -108,7 +103,6 @@
         <tr><td colspan="2" style="padding-top:6px;"><div style="height:2px;background:rgba(255,255,255,0.05);border-radius:1px;"><div style="height:2px;width:{{ sensoriel_pct }}%;background:linear-gradient(90deg,#342629,#d4cbbc);border-radius:1px;"></div></div></td></tr>
       </table>
 
-      <!-- Physique -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td style="font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#342629;font-family:Arial,Helvetica,sans-serif;font-weight:700;">🔥 Physique {% if result_code == 'physique' %}<span style="color:#B88757;">★</span>{% endif %}</td>
@@ -119,7 +113,7 @@
     </td>
   </tr>
 
-  <!-- ── CTA Section ── -->
+  <!-- CTA Section -->
   <tr>
     <td style="padding:0 40px 40px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
@@ -141,34 +135,34 @@
         </tr>
       </table>
 
-      <!-- CTA 2 : Séminaires -->
+      <!-- CTA 2 : Site web -->
       <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;">
         <tr>
           <td style="border:1px solid rgba(222,130,132,0.4);padding:12px 28px;border-radius:1px;">
-            <a href="https://intimementnous.com/seminaires" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A85F68;text-decoration:none;">
-              Découvrir nos séminaires
+            <a href="https://www.intimement-toi.com/" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A85F68;text-decoration:none;">
+              Découvrir le site
             </a>
           </td>
         </tr>
       </table>
 
-      <!-- CTA 3 : Appel découverte -->
+      <!-- CTA 3 : Calendly -->
       <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;">
         <tr>
           <td style="border:1px solid rgba(197,184,163,0.25);padding:12px 28px;border-radius:1px;">
-            <a href="https://intimementnous.com/appel-decouverte" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6F5C52;text-decoration:none;">
-              Réserver un appel découverte
+            <a href="https://calendly.com/contact-intimement-toi/session-intimement-nous" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6F5C52;text-decoration:none;">
+              Réserver une session
             </a>
           </td>
         </tr>
       </table>
 
-      <!-- CTA 4 : Application -->
+      <!-- CTA 4 : Facebook -->
       <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
         <tr>
           <td style="border:1px solid rgba(197,184,163,0.15);padding:12px 28px;border-radius:1px;">
-            <a href="https://intimementnous.com/app" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6F5C52;text-decoration:none;">
-              Accéder à l'application
+            <a href="https://www.facebook.com/Intimementtoi" target="_blank" style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6F5C52;text-decoration:none;">
+              Suivre sur Facebook
             </a>
           </td>
         </tr>
@@ -179,11 +173,11 @@
   <!-- Footer -->
   <tr>
     <td style="padding:24px 40px 32px;border-top:1px solid rgba(197,184,163,0.08);text-align:center;background:#F7EBDF;">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#6F5C52;text-transform:uppercase;margin:0 0 10px;">Intimement Nous</p>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#6F5C52;text-transform:uppercase;margin:0 0 10px;">Intimement Toi</p>
       <p style="font-size:11px;color:#342629;margin:0 0 8px;font-family:Georgia,serif;line-height:1.6;">
         Cet email vous a été envoyé suite à votre participation au questionnaire.<br>Vos données restent strictement confidentielles.
       </p>
-      <p style="font-size:10px;color:#342629;margin:0;font-family:Georgia,serif;">© Intimement Nous — Tous droits réservés</p>
+      <p style="font-size:10px;color:#342629;margin:0;font-family:Georgia,serif;">© Intimement Toi — Tous droits réservés</p>
     </td>
   </tr>
 

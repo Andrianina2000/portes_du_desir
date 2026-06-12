@@ -359,7 +359,7 @@ def send_result_email(session, result_data):
     # Important Gmail / Outlook : on utilise une URL publique HTTPS.
     # Le CID / pièce jointe inline peut apparaître cassé dans Gmail, surtout en spam.
     # SITE_URL doit contenir le domaine Railway ou le domaine personnalisé, sans slash final.
-    site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
+    site_url = getattr(settings, 'SITE_URL', 'https://intimement-nous.up.railway.app').rstrip('/')
     illustration_url = f"{site_url}/static/quiz/img/{illustration_file}" if illustration_file else ''
 
     ctx = {

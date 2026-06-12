@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
-    'https://intimement-nous.up.railway.app',
+    'https://web-production-eb2eba.up.railway.app',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
@@ -99,7 +99,7 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'consultingyaba@gmail.
 ADMIN_RESULT_EMAIL = os.environ.get('ADMIN_RESULT_EMAIL', '')
 
 # URL publique du site (utilisée pour les images dans les emails)
-SITE_URL = os.environ.get('SITE_URL', 'https://intimement-nous.up.railway.app')
+SITE_URL = os.environ.get('SITE_URL', 'https://web-production-eb2eba.up.railway.app')
 
 # Liens configurables : à remplacer dans Railway par les vrais liens fournis par la cliente.
 INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/intimementtoi/')

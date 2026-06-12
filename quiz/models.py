@@ -60,6 +60,80 @@ class QuizAnswer(models.Model):
     def __str__(self): return f"Session {self.session_id} - Q{self.question_id}"
 
 
+class ResultContent(models.Model):
+    """Contenu éditable d'une porte de résultat.
+
+    La cliente peut modifier ici les textes affichés sur la page résultat
+    et surtout le contenu long envoyé par email. Le champ email_content
+    accepte une mise en forme simple type Markdown.
+    """
+
+    code = models.CharField(
+        max_length=50,
+        choices=RESULT_CHOICES,
+        unique=True,
+        help_text="Porte concernée. Ne pas changer après création."
+    )
+    label = models.CharField(
+        max_length=100,
+        help_text="Exemple : Porte Mentale"
+    )
+    title = models.CharField(
+        max_length=255,
+        help_text="Sous-titre principal affiché sous la porte."
+    )
+    subtitle = models.CharField(
+        max_length=255,
+        blank=True,
+        default='',
+        help_text="Petit texte de contexte affiché sur la page résultat."
+    )
+    description = models.TextField(
+        blank=True,
+        default='',
+        help_text="Résumé court affiché dans le mail et sur la page résultat."
+    )
+    besoins = models.TextField(
+        blank=True,
+        default='',
+        help_text="Bloc court : besoins / ce qui nourrit cette porte."
+    )
+    conseil = models.TextField(
+        blank=True,
+        default='',
+        help_text="Bloc court : conseil ou piste d'accompagnement."
+    )
+    phrase = models.CharField(
+        max_length=500,
+        blank=True,
+        default='',
+        help_text="Phrase-clé affichée en citation."
+    )
+    email_content = models.TextField(
+        blank=True,
+        default='',
+        help_text=(
+            "Contenu long du mail. Mise en forme acceptée : ## Titre, ### Sous-titre, "
+            "**gras**, *italique*, - liste, > citation, --- séparation, [lien](https://...)."
+        )
+    )
+    email_footer = models.TextField(
+        blank=True,
+        default='',
+        help_text="Bloc final commun ou spécifique ajouté après le contenu long. Même mise en forme que le contenu email."
+    )
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['code']
+        verbose_name = "Résultat / email personnalisable"
+        verbose_name_plural = "Résultats / emails personnalisables"
+
+    def __str__(self):
+        return self.label or self.code
+
+
 class SiteText(models.Model):
     key = models.SlugField(
         max_length=100,

@@ -3,6 +3,8 @@ import os
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +98,137 @@ def _editable_text(key, default=''):
         pass
     return default
 
+
+
+def _format_email_rich_text(text):
+    """
+    Transforme un texte saisi dans l'admin en HTML propre pour l'email.
+    - conserve les paragraphes
+    - transforme les petits titres en intertitres
+    - transforme les listes apres une ligne qui finit par ':' en puces
+    - met les citations en encadre
+    Le texte est echappe pour eviter d'injecter du HTML non controle.
+    Pour mettre un mot en gras dans l'admin, utiliser **mot en gras**.
+    """
+    import re
+
+    raw = (text or '').replace('\r\n', '\n').replace('\r', '\n').strip()
+    if not raw:
+        return ''
+
+    def fmt(line):
+        safe = escape(line.strip())
+        # Gras simple utilisable dans l'admin : **texte**
+        safe = re.sub(r'\*\*(.+?)\*\*', r'<strong style="font-weight:700;color:#5A0E28;">\1</strong>', safe)
+        return safe
+
+    lines = [line.strip() for line in raw.split('\n')]
+    html = []
+    paragraph = []
+    in_list = False
+    bullet_mode = False
+
+    def flush_paragraph():
+        nonlocal paragraph
+        if paragraph:
+            body = '<br>'.join(fmt(x) for x in paragraph if x.strip())
+            if body:
+                html.append(
+                    '<p style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.85;'
+                    'color:#342629;text-align:left;margin:0 0 18px;">' + body + '</p>'
+                )
+        paragraph = []
+
+    def close_list():
+        nonlocal in_list, bullet_mode
+        if in_list:
+            html.append('</ul>')
+        in_list = False
+        bullet_mode = False
+
+    def is_title(line):
+        clean = line.strip()
+        if not clean:
+            return False
+        if clean.startswith('«') or clean.endswith(':'):
+            return False
+        # Gros titre type "🧠 PORTE MENTALE"
+        if any(clean.startswith(e) for e in ['🧠', '❤️', '✨', '🌿', '🔥']) and len(clean) <= 80:
+            return True
+        # Intertitres courts sans point final
+        if len(clean) <= 72 and not clean.endswith(('.', ';', ',', '!', '?', '»')):
+            words = clean.split()
+            if 2 <= len(words) <= 8:
+                return True
+        return False
+
+    def is_bullet(line):
+        clean = line.strip()
+        if not clean:
+            return False
+        if len(clean) > 120:
+            return False
+        starters = (
+            'un ', 'une ', 'des ', 'de ', 'du ', 'd’', "d'", 'le ', 'la ', 'les ',
+            'cultiver ', 'partager ', 'lire ', 'prendre ', 'exprimer ', 'créer ', 'creer ',
+            'vous ', '❤️', '🧠', '✨', '🌿', '🔥'
+        )
+        return clean.lower().startswith(starters) or clean.endswith(';')
+
+    for line in lines:
+        if not line:
+            flush_paragraph()
+            # On garde le mode liste apres une ligne vide, car les textes colles depuis Word
+            # mettent souvent une ligne vide entre chaque puce.
+            continue
+
+        if line.startswith('«') and line.endswith('»'):
+            flush_paragraph()
+            close_list()
+            html.append(
+                '<div style="font-family:Georgia,serif;font-size:19px;line-height:1.65;color:#8C5A32;'
+                'font-style:italic;text-align:center;margin:22px 0;padding:20px 22px;'
+                'border-top:1px solid #E7D8CB;border-bottom:1px solid #E7D8CB;background:#FFF8F1;">'
+                + fmt(line) + '</div>'
+            )
+            continue
+
+        if bullet_mode and is_bullet(line):
+            flush_paragraph()
+            if not in_list:
+                html.append('<ul style="margin:0 0 22px 22px;padding:0;font-family:Arial,Helvetica,sans-serif;color:#342629;text-align:left;">')
+                in_list = True
+            item = line.rstrip(' ;')
+            html.append('<li style="font-size:16px;line-height:1.75;margin:0 0 8px;padding-left:4px;">' + fmt(item) + '</li>')
+            continue
+
+        if in_list:
+            close_list()
+
+        if is_title(line):
+            flush_paragraph()
+            if any(line.startswith(e) for e in ['🧠', '❤️', '✨', '🌿', '🔥']):
+                html.append(
+                    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;'
+                    'letter-spacing:2px;text-transform:uppercase;color:#5A0E28;font-weight:700;'
+                    'text-align:center;margin:28px 0 10px;">' + fmt(line) + '</div>'
+                )
+            else:
+                html.append(
+                    '<h2 style="font-family:Georgia,serif;font-size:24px;line-height:1.25;color:#5A0E28;'
+                    'font-weight:600;text-align:left;margin:30px 0 12px;">' + fmt(line) + '</h2>'
+                )
+            continue
+
+        paragraph.append(line)
+        if line.endswith(':'):
+            flush_paragraph()
+            bullet_mode = True
+
+    flush_paragraph()
+    close_list()
+
+    return mark_safe(''.join(html))
 
 def get_result_content(code):
     base = RESULT_CONTENT.get(code, {}).copy()
@@ -240,6 +373,7 @@ def send_result_email(session, result_data):
         'result_label': result_data['label'],
         'result_title': result_data['title'],
         'result_description': result_data['description'],
+        'result_description_html': _format_email_rich_text(result_data.get('description', '')),
         'result_phrase': result_data.get('phrase', ''),
         'score_mental': session.total_score_mental,
         'score_emotionnel': session.total_score_emotionnel,

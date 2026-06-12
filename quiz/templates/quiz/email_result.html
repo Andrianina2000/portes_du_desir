@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Votre résultat — Intimement Toi</title>
 </head>
-<body style="margin:0;padding:0;background:#FBF3EA;font-family:Arial,Helvetica,sans-serif;">
+<body style="margin:0;padding:0;background:#FBF3EA;font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FBF3EA;">
 <tr><td align="center" style="padding:40px 16px;">
 
-<table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;background:#FFFDF9;border:1px solid #E7D8CB;border-radius:16px;overflow:hidden;">
+<table width="640" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;width:100%;background:#FFFDF9;border:1px solid #E7D8CB;border-radius:16px;overflow:hidden;">
 
   <!-- Ligne déco top -->
   <tr>
@@ -52,23 +52,36 @@
     </td>
   </tr>
 
-  <!-- Description -->
+  <!-- Description longue lisible -->
   <tr>
-    <td style="padding:32px 40px;">
+    <td style="padding:32px 28px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.24),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
-      <p style="font-size:17px;line-height:1.9;color:#342629;text-align:center;padding:28px 10px 24px;margin:0;font-family:Georgia,serif;">{{ result_description }}</p>
-      <p style="font-family:Georgia,serif;font-size:19px;font-style:italic;color:#B88757;text-align:center;margin:0 0 28px;line-height:1.6;">&ldquo; {{ result_phrase }} &rdquo;</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 26px;background:#FFFCF8;border:1px solid #EADDD1;border-radius:14px;">
+        <tr>
+          <td style="padding:30px 32px;">
+            {{ result_description_html|safe }}
+          </td>
+        </tr>
+      </table>
+
+      {% if result_phrase %}
+      <div style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:#8C5A32;text-align:center;margin:0 0 26px;line-height:1.65;padding:22px 24px;background:#FFF8F1;border-top:1px solid #E7D8CB;border-bottom:1px solid #E7D8CB;">
+        &ldquo; {{ result_phrase }} &rdquo;
+      </div>
+      {% endif %}
+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.2),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.24),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
     </td>
   </tr>
 
   <!-- Scores -->
   <tr>
-    <td style="padding:0 40px 32px;">
+    <td style="padding:0 32px 32px;">
       <p style="font-size:9px;letter-spacing:4px;color:#6F5C52;text-transform:uppercase;text-align:center;margin:0 0 22px;font-family:Georgia,serif;">Détail de vos cinq portes</p>
 
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
@@ -115,7 +128,7 @@
 
   <!-- CTA Section -->
   <tr>
-    <td style="padding:0 40px 40px;">
+    <td style="padding:0 32px 40px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
         <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(197,184,163,0.12),transparent);font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>
@@ -172,7 +185,7 @@
 
   <!-- Footer -->
   <tr>
-    <td style="padding:24px 40px 32px;border-top:1px solid rgba(197,184,163,0.08);text-align:center;background:#F7EBDF;">
+    <td style="padding:24px 32px 32px;border-top:1px solid rgba(197,184,163,0.08);text-align:center;background:#F7EBDF;">
       <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#6F5C52;text-transform:uppercase;margin:0 0 10px;">Intimement Toi</p>
       <p style="font-size:11px;color:#342629;margin:0 0 8px;font-family:Georgia,serif;line-height:1.6;">
         Cet email vous a été envoyé suite à votre participation au questionnaire.<br>Vos données restent strictement confidentielles.

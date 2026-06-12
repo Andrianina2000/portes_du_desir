@@ -356,17 +356,11 @@ def send_result_email(session, result_data):
     }
 
     illustration_file = illustration_map.get(session.result_code, '')
-    illustration_path = _find_illustration_path(illustration_file)
-    illustration_cid = 'result_illustration'
-
-    # Si l'image existe localement, on l'integre dans l'email avec cid.
-    # Sinon, fallback vers l'URL static pour ne pas casser totalement le rendu.
-    if illustration_path:
-        illustration_url = f'cid:{illustration_cid}'
-    else:
-        site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
-        illustration_url = f"{site_url}/static/quiz/img/{illustration_file}"
-        logger.warning(f"Image email introuvable localement : {illustration_file}")
+    # Important Gmail / Outlook : on utilise une URL publique HTTPS.
+    # Le CID / pièce jointe inline peut apparaître cassé dans Gmail, surtout en spam.
+    # SITE_URL doit contenir le domaine Railway ou le domaine personnalisé, sans slash final.
+    site_url = getattr(settings, 'SITE_URL', 'https://web-production-eb2eba.up.railway.app').rstrip('/')
+    illustration_url = f"{site_url}/static/quiz/img/{illustration_file}" if illustration_file else ''
 
     ctx = {
         'result_code': session.result_code,
@@ -404,19 +398,7 @@ def send_result_email(session, result_data):
         plain_text_content=text_body,
     )
 
-    if illustration_path:
-        mime_type = mimetypes.guess_type(illustration_path)[0] or 'image/jpeg'
-        with open(illustration_path, 'rb') as image_file:
-            encoded_image = base64.b64encode(image_file.read()).decode()
-
-        attachment = Attachment(
-            FileContent(encoded_image),
-            FileName(illustration_file),
-            FileType(mime_type),
-            Disposition('inline'),
-            ContentId(illustration_cid),
-        )
-        message.add_attachment(attachment)
+    # Pas de pièce jointe image ici : l'image est chargée depuis l'URL publique.
 
     if admin_email:
         message.add_bcc(Bcc(admin_email))
